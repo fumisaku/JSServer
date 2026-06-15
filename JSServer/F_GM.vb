@@ -1361,29 +1361,44 @@ Public Class F_GM
                 'クライアントリストに追加
                 Add_Client(e.Client)
 
-                Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "が接続しました"})
-
-                J_LOGIN色付け()
+                ' UIスレッドで実行
+                Me.Invoke(Sub()
+                              Try
+                                  LOG.LogAdd(e.Client.端末名 & "が接続しました", 3)
+                                  J_LOGIN色付け()
+                              Catch ex As Exception
+                                  LOG.LogAdd("REQKUBUN処理エラー: " & ex.Message, 1)
+                              End Try
+                          End Sub)
 
             Case "REQHEAT"
                 'E11_LOGIN
 
                 Add_Client(e.Client)
 
-                'Me.LB_LOG.Items.Add("")
-                Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がログインしました。"})
-
-                'MsgBox(e.Client.端末名 & "_" & e.Client.ジャッジ記号)
-                'MsgBox(sender.区分番号)
-
-                J_LOGIN色付け()
+                ' UIスレッドで実行
+                Me.Invoke(Sub()
+                              Try
+                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がログインしました。", 3)
+                                  J_LOGIN色付け()
+                              Catch ex As Exception
+                                  LOG.LogAdd("REQHEAT処理エラー: " & ex.Message, 1)
+                              End Try
+                          End Sub)
 
 
             Case "REQHEAT_2"
 
                 Add_Client(e.Client)
 
-                J_LOGIN色付け()
+                ' UIスレッドで実行
+                Me.Invoke(Sub()
+                              Try
+                                  J_LOGIN色付け()
+                              Catch ex As Exception
+                                  LOG.LogAdd("REQHEAT_2処理エラー: " & ex.Message, 1)
+                              End Try
+                          End Sub)
 
 
             Case "SNDTEMP"
@@ -1414,11 +1429,10 @@ Public Class F_GM
                 'E13_RCV
                 Add_Client(e.Client)
 
-                Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。"})
-
-                ' UIスレッドで実行し、例外処理を追加
+                ' UIスレッドで実行し、例外処理を追加（LogDelegateとの二重Invoke解消）
                 Me.Invoke(Sub()
                               Try
+                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
                                   SyncLock lockObj
                                       J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
                                       J_Send色付け(現在種目順, 現在ヒート番号)
@@ -1435,11 +1449,10 @@ Public Class F_GM
                 'E13_RCV
                 Add_Client(e.Client)
 
-                Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。"})
-
-                ' UIスレッドで実行し、例外処理を追加
+                ' UIスレッドで実行し、例外処理を追加（LogDelegateとの二重Invoke解消）
                 Me.Invoke(Sub()
                               Try
+                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
                                   SyncLock lockObj
                                       J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
                                       J_Send色付け(現在種目順, 現在ヒート番号)
@@ -1455,11 +1468,10 @@ Public Class F_GM
                 'E13_RCV
                 Add_Client(e.Client)
 
-                Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。"})
-
-                ' UIスレッドで実行し、例外処理を追加
+                ' UIスレッドで実行し、例外処理を追加（LogDelegateとの二重Invoke解消）
                 Me.Invoke(Sub()
                               Try
+                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
                                   SyncLock lockObj
                                       J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
                                       J_Send色付け(現在種目順, 現在ヒート番号)
@@ -1474,11 +1486,10 @@ Public Class F_GM
                 'E13_RCV
                 Add_Client(e.Client)
 
-                Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。"})
-
-                ' UIスレッドで実行し、例外処理を追加
+                ' UIスレッドで実行し、例外処理を追加（LogDelegateとの二重Invoke解消）
                 Me.Invoke(Sub()
                               Try
+                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
                                   SyncLock lockObj
                                       'CheckAllJudgSend_BR2(str.Split(",")(5), str.Split(",")(6))   'GMの現在競技以外でSENDされても、進行を更新するため。
                                       'TCP Clientで実装する。
