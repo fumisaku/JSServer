@@ -873,15 +873,28 @@ Public Class F_GM
                     If S_採点結果_J.JSON読み込み() > 0 Then
 
                         If S_採点結果_J.BR2_種目結果_J(対象種目順).BR2_選手結果_J(対象ヒート番号).SEND_FLAG = "1" Then
-                            Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Color.Cyan
+                            '範囲チェック追加
+                            If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                                Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Color.Cyan
+                            Else
+                                LOG.LogAdd($"インデックス範囲外(BR2_SEND): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                            End If
                         Else
-                            '未SENDのジャッジがいる時
-                            Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                            '未SENDのジャッジがいる時（範囲チェック追加）
+                            If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                                Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                            Else
+                                LOG.LogAdd($"インデックス範囲外(BR2_未SEND): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                            End If
                             全SENDFLAG = False
                         End If
                     Else
-                        '一度もデータを送っていないジャッジが居るとき
-                        Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                        '一度もデータを送っていないジャッジが居るとき（範囲チェック追加）
+                        If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                            Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                        Else
+                            LOG.LogAdd($"インデックス範囲外(BR2_データなし): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                        End If
                         全SENDFLAG = False
                     End If
                 Next j
@@ -905,15 +918,28 @@ Public Class F_GM
                     If S_採点結果_J.JSON読み込み() > 0 Then
 
                         If S_採点結果_J.SEND_FLAG = "1" Then
-                            Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Color.Cyan
+                            '範囲チェック追加
+                            If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                                Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Color.Cyan
+                            Else
+                                LOG.LogAdd($"インデックス範囲外(BR2_非ソロ_SEND): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                            End If
                         Else
-                            '未SENDのジャッジがいる時
-                            Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                            '未SENDのジャッジがいる時（範囲チェック追加）
+                            If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                                Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                            Else
+                                LOG.LogAdd($"インデックス範囲外(BR2_非ソロ_未SEND): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                            End If
                             全SENDFLAG = False
                         End If
                     Else
-                        '一度もデータを送っていないジャッジが居るとき
-                        Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                        '一度もデータを送っていないジャッジが居るとき（範囲チェック追加）
+                        If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                            Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                        Else
+                            LOG.LogAdd($"インデックス範囲外(BR2_非ソロ_データなし): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                        End If
                         全SENDFLAG = False
                     End If
                 Next j
@@ -958,11 +984,19 @@ Public Class F_GM
 
                             'SENDFLAGの確認
                             If S_採点結果.S_採点結果_選手_J(s).SEND_FLAG = 1 Then
-                                'ジャッジセルを青にする
-                                Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Color.Cyan
+                                'ジャッジセルを青にする（範囲チェック追加）
+                                If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                                    Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Color.Cyan
+                                Else
+                                    LOG.LogAdd($"インデックス範囲外(SEND): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                                End If
                             Else
-                                '未SENDのジャッジがいる時
-                                Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                                '未SENDのジャッジがいる時（範囲チェック追加）
+                                If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                                    Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                                Else
+                                    LOG.LogAdd($"インデックス範囲外(未SEND): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                                End If
 
                                 'ソロの技術判定員以外は問題無し
                                 If マスタデータ.審判員マスタ.Get_審判Class(ジャッジ記号(j)).審判チーム(マスタデータ.C_ラウンドマスタ.Get担当審判グループ(現在区分番号, 現在ラウンド番号)) = "T" Then
@@ -983,12 +1017,22 @@ Public Class F_GM
                     Next s
 
                     If 背番号存在FLAG = False Then
-                        Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                        '範囲チェック追加
+                        If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                            Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                        Else
+                            LOG.LogAdd($"インデックス範囲外(背番号不存在): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                        End If
                         全SENDFLAG = False
                     End If
 
                 Else
-                    Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                    '範囲チェック追加
+                    If j > 0 AndAlso j <= Me.DGV_ジャッジ.Rows.Count Then
+                        Me.DGV_ジャッジ.Rows(j - 1).Cells(1).Style.BackColor = Nothing
+                    Else
+                        LOG.LogAdd($"インデックス範囲外(採点結果なし): j={j}, Rows.Count={Me.DGV_ジャッジ.Rows.Count}", 1)
+                    End If
                     '採点ファイルが存在しないとき
 
                     '技術判定員は、ソロの時だけ無し
@@ -1372,12 +1416,17 @@ Public Class F_GM
 
                 Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。"})
 
-                SyncLock lockObj
-
-                    J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
-                    J_Send色付け(現在種目順, 現在ヒート番号)
-
-                End SyncLock
+                ' UIスレッドで実行し、例外処理を追加
+                Me.Invoke(Sub()
+                              Try
+                                  SyncLock lockObj
+                                      J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
+                                      J_Send色付け(現在種目順, 現在ヒート番号)
+                                  End SyncLock
+                              Catch ex As Exception
+                                  LOG.LogAdd("SNDRESLT処理エラー: " & ex.Message, 1)
+                              End Try
+                          End Sub)
 
                 'ここでイベントを発生させて、F501を更新したい
 
@@ -1388,12 +1437,17 @@ Public Class F_GM
 
                 Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。"})
 
-                SyncLock lockObj
-
-                    J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
-                    J_Send色付け(現在種目順, 現在ヒート番号)
-
-                End SyncLock
+                ' UIスレッドで実行し、例外処理を追加
+                Me.Invoke(Sub()
+                              Try
+                                  SyncLock lockObj
+                                      J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
+                                      J_Send色付け(現在種目順, 現在ヒート番号)
+                                  End SyncLock
+                              Catch ex As Exception
+                                  LOG.LogAdd("SNDRESLT_J処理エラー: " & ex.Message, 1)
+                              End Try
+                          End Sub)
 
                 'ここでイベントを発生させて、F501を更新したい
 
@@ -1403,12 +1457,17 @@ Public Class F_GM
 
                 Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。"})
 
-                SyncLock lockObj
-
-                    J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
-                    J_Send色付け(現在種目順, 現在ヒート番号)
-
-                End SyncLock
+                ' UIスレッドで実行し、例外処理を追加
+                Me.Invoke(Sub()
+                              Try
+                                  SyncLock lockObj
+                                      J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
+                                      J_Send色付け(現在種目順, 現在ヒート番号)
+                                  End SyncLock
+                              Catch ex As Exception
+                                  LOG.LogAdd("SNDRESLT_V2_J処理エラー: " & ex.Message, 1)
+                              End Try
+                          End Sub)
 
 
             Case "SNDRESLT_BR2_J"
@@ -1417,15 +1476,20 @@ Public Class F_GM
 
                 Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。"})
 
-                SyncLock lockObj
+                ' UIスレッドで実行し、例外処理を追加
+                Me.Invoke(Sub()
+                              Try
+                                  SyncLock lockObj
+                                      'CheckAllJudgSend_BR2(str.Split(",")(5), str.Split(",")(6))   'GMの現在競技以外でSENDされても、進行を更新するため。
+                                      'TCP Clientで実装する。
 
-                    'CheckAllJudgSend_BR2(str.Split(",")(5), str.Split(",")(6))   'GMの現在競技以外でSENDされても、進行を更新するため。
-                    'TCP Clientで実装する。
-
-                    J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
-                    J_Send色付け(現在種目順, 現在ヒート番号)
-
-                End SyncLock
+                                      J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
+                                      J_Send色付け(現在種目順, 現在ヒート番号)
+                                  End SyncLock
+                              Catch ex As Exception
+                                  LOG.LogAdd("SNDRESLT_BR2_J処理エラー: " & ex.Message, 1)
+                              End Try
+                          End Sub)
 
 
 
