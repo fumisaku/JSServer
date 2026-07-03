@@ -1,24 +1,26 @@
 ﻿Public Class 選手
 
-    Private 背番号
+    Public List番号 As String
 
-    Private リーダー会員番号
-    Private リーダー氏名
-    Private リーダーフリガナ
-    Private リーダー表記名
-    Private リーダーサークルコード
-    Private リーダー所属名
+    Public 背番号 As String
 
-    Private パートナ会員番号
-    Private パートナ氏名
-    Private パートナフリガナ
-    Private パートナ表記名
-    Private パートナサークルコード
-    Private パートナ所属名
+    Public リーダー会員番号 As String
+    Public リーダー氏名 As String
+    Public リーダーフリガナ As String
+    Public リーダー表記名 As String
+    Public リーダーサークルコード As String
+    Public リーダー所属名 As String
 
-    Private カップル所属名
+    Public パートナ会員番号 As String
+    Public パートナ氏名 As String
+    Public パートナフリガナ As String
+    Public パートナ表記名 As String
+    Public パートナサークルコード As String
+    Public パートナ所属名 As String
 
-    Private エントリー区分(100)
+    Public カップル所属名 As String
+
+    Public エントリー区分(100) As String
 
 
 End Class

@@ -1,0 +1,199 @@
+p.pagechange {page-break-before: always; }
+.pageavoid {page-break-inside: avoid; }
+
+table.table1 {
+			border-collapse: collapse;
+			border: 2px solid green;
+			font-family: Arial,sans-serif;
+			/* table-layout: fixed; */
+
+		}
+		table.table1 th,
+		table.table1 td {
+			border: 1px solid green;
+			padding: 0.3em;
+			font-size: 90%;
+		}
+		table.table1 thead {
+			background-color: #ccffcc;
+			border-bottom: 3px double green;
+			font-size: 90%;
+		}
+		
+/* 順位 */  td.rank0 {  text-align: center; 
+ 						font-weight: bold;
+ 						color: #0000cc;
+ 						font-size: 100%;
+						background-color: #ffffcc; }
+/* 背番号 */ td.No { text-align: center; 
+　					font-size: middle; 
+　					 font-size: 100%;
+					 background-color: #ffffcc; }
+						
+/* 氏名 */ td.Name { text-align: center; 
+										 padding-right: 0.5em; 
+										 color: #cc0000; 
+										 word-wrap:normal;
+										 font-weight: bold; }
+/* 所属 */ td.Country { text-align: center; 
+										 padding-right: 0.5em; 
+										 color: #cc0000; 
+										 font-weight: bold; }
+/* Total */ td.TotalScore { text-align: right;
+										 padding-right: 0.5em; 
+										 color: #0000cc;
+										 width: 70px; }
+/* 種目毎スコア */ td.DanceScore { text-align: right; 
+										padding-right: 0.5em; 
+										color: #000000;
+										width: 50px; }
+
+
+
+/* 詳細点数テーブルの設定*/
+table.table_det {
+			border-collapse: collapse;
+			border: 2px solid green;
+			font-family: Arial,sans-serif;
+		/*	table-layout: fixed;  */
+		}
+		table.table_det th,
+		table.table_det td {
+			border: 1px solid green;
+			padding: 0em 0.3em;
+		}
+		table.table_det thead {
+			background-color: #ccffcc;
+			border-bottom: 3px double green;
+			font-size: 70%;
+			word-wrap:break-word;
+		}
+
+
+th.redname {  text-align: center; 
+　			font-size: middle; 
+			background-color: #ccffcc;
+			font-size: 70%;
+		width: 40px; }
+
+td.judge {  text-align: center; 
+　			font-size: middle; 
+			background-color: #ffffcc;
+			font-size: 70%;
+		width: 40px; }
+td.pcs { text-align: right; 
+		padding-right: 0.5em; 
+		color: #000000; 
+		font-size: 70%;
+		width: 40px; }
+td.pcs2 { text-align: left; 
+		padding-right: 0.5em; 
+		color: #000000; 
+		font-size: 70%;
+		width: 20px; }
+td.redu { text-align: Center; 
+		padding-right: 0.5em; 
+		color: #000000; 
+		width: 20px; }
+td.pcstotal { text-align: right; 
+		padding-right: 0.5em; 
+		color: #0000cc;
+		font-weight: bold;
+		font-size: 100%;
+		width: 60px; }
+td.rank { text-align: Center; 
+		padding-right: 0.5em; 
+		color: #0000cc;
+     	font-weight: bold;
+     	font-size: 150%;
+		width: 20px; }
+		
+		
+
+/* No */ table.table_det tr td:nth-of-type(1) { text-align: center; 
+										 background-color: #ffffcc; }
+										 
+										 
+										 
+table.table_coomon {
+			border-collapse: collapse;
+			border: 2px solid green;
+			font-family: Arial,sans-serif;
+		/*	table-layout: fixed;  */
+
+		}
+		table.table_coomon th,
+		table.table_coomon td {
+			border: 1px solid green;
+			padding: 0.3em 0.3em;
+/*			font-size: 90%; */
+		}
+		table.table_coomon thead {
+			background-color: #ccffcc;
+			border-bottom: 3px double green;
+			font-size: 90%;
+		}
+
+td.Compname {
+ 		text-align: center; 
+ 		font-weight: normal;
+ 		color: #000000;
+ 		font-size: 90%;
+ 		background-color: #FFFFFF; 
+}
+
+td.Title {
+ 		text-align: center; 
+ 		font-weight: normal;
+ 		color: #000000;
+ 		font-size: 120%;
+ 		font-weight: bold;
+ 		background-color: #FFFFcc; 
+}
+		
+td.Title01 {
+ 		text-align: center; 
+ 		font-weight: normal;
+ 		color: #000000;
+ 		font-size: 80%;
+ 		background-color: #ffffcc; 
+}
+		
+td.Kubun {
+ 		text-align: center; 
+ 		font-weight: bold;
+ 		color: #0000cc;
+ 		font-size: 120%;
+ 		background-color: #ffffff;
+}
+td.round {
+ 		text-align: center; 
+ 		font-weight: bold;
+ 		color: #0000cc;
+ 		font-size: 120%;
+ 		background-color: #ffffff;
+}
+td.data01 {
+ 		text-align: center; 
+ 		font-weight: normal;
+ 		color: #000000;
+ 		font-size: 100%;
+ 		background-color: #ffffff;
+ 		padding: 0.3em ;
+}
+td.data02B {
+ 		text-align: center; 
+ 		font-weight: normal;
+ 		color: #000000;
+ 		font-size: 90%;
+ 		background-color: #00FFFF !important;
+ 		padding: 0.3em ;
+}
+td.data02 {
+ 		text-align: center; 
+ 		font-weight: normal;
+ 		color: #000000;
+ 		font-size: 90%;
+ 		background-color: #FFFFFF;
+ 		padding: 0.3em ;
+}

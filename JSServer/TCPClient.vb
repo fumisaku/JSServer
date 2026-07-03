@@ -140,9 +140,11 @@ Public Class TCPClient
 
         '再び受信開始
         SyncLock Me
-            Me._socket.BeginReceive(receiveBuffer, 0, receiveBuffer.Length,
-                SocketFlags.None,
-                New AsyncCallback(AddressOf ReceiveDataCallback), receiveBuffer)
+            If Not Me.IsClosed Then
+                Me._socket.BeginReceive(receiveBuffer, 0, receiveBuffer.Length,
+                    SocketFlags.None,
+                    New AsyncCallback(AddressOf ReceiveDataCallback), receiveBuffer)
+            End If
         End SyncLock
     End Sub
 

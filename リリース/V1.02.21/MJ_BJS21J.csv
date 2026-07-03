@@ -1,0 +1,37 @@
+[PCS設定]
+// BJS2.0   英語名称、日本語名称、倍率、最大点
+1,技術,1.0,Technique,40
+2,表現,1.0,Expression,30
+3,構成,1.0,Constitution,20
+4,戦い,1.0,Battles,10
+[担当PCS]
+// PCS担当の組合せ一覧  Solo,Group,Duel, 担当PCS 13  24 の2種類の組み合わせ
+1,1,0,13
+1,1,0,24
+0,0,1,1234
+[減点設定]
+// No, 減点項目名, 英語, Solo/Group/Match, 最初の減点の値, 最大値, ステップ
+1,LOST,LOST,SGM,1,1,1
+2,Repeat,Repeat,SGM,-1,-5,-2
+3,Bite,Bite,SGM,-1,-5,-2
+4,Crash,Crash,SGM,-1,-5,-2
+5,Misbehavior,Misbehavior,SGM,-1,-5,-2
+6,Surprise,Surprise,SGM,3,10,4
+[既定種目順]
+//SL区分,No,種目記号,SG種別
+S,1,F,S
+S,2,W,G
+S,3,T,G
+S,4,Q,S
+S,5,V,G
+L,1,C,S
+L,2,S,G
+L,3,R,G
+L,4,J,S
+L,5,P,G
+[同点処理]
+//0: 同点処理無し(同点は同順位）　1:同点処理あり
+0
+[勝敗方式]
+//ブレイキンのみ　P:ポイント制（得点制）  R:ラウンド制  カンマの後ろは勝敗ラウンド数
+P,4

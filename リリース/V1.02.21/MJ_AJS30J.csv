@@ -1,0 +1,33 @@
+[PCS設定]
+1,TQ,1.0,xxxxxxx
+2,MM,1.0,xxx
+3,PS,1.0,xxxxx
+4,CP,1.0,xxxxxxx
+[担当PCS]
+// PCS担当の組合せ一覧  Solo,Group,Duel, 担当PCS 13  24 の2種類の組み合わせ
+1,1,1,13
+1,1,1,24
+[減点設定]
+// No, 減点項目名, 英語, Solo/Group/Match, 最初の減点の値, 最大値, ステップ
+1,失格,Lost,SGM,1,1,1
+2,Fall,Fall,SGM,-2,-6,-2
+3,中断1,Discon1.,SGM,-1,-1,-1
+4,中断2,Discon2.,SGM,-0.5,-0.5,-0.5
+5,ドレス違反,Dress,SGM,-2,-2,-2
+6,妨害,Obstraction,GM,-2,-12,-2
+7,エラー,Error,SGM,-0.5,-3,-0.5
+[既定種目順]
+//SL区分,No,種目記号,SG種別 2020年版
+S,1,W,S
+S,2,V,G
+S,3,F,G
+S,4,T,S
+S,5,Q,G
+L,1,S,S
+L,2,C,G
+L,3,P,G
+L,4,R,S
+L,5,J,G
+[同点処理]
+//0: 同点処理無し(同点は同順位）　1:同点処理あり
+1

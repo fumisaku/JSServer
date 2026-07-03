@@ -1,0 +1,838 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+JSServer
+</name>
+</assembly>
+<members>
+<member name="T:JSServer.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:JSServer.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:JSServer.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="M:JSServer.A_競技会マスタ.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.A_競技会マスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.BM_ブックマーク.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.BM_ブックマーク.登録(JSServer.BM_BM)">
+ 区分データをCSVに追加する、同じ区分番号・ラウンド番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.BM_ブックマーク.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.BM_ブックマーク.カンマ区切り(JSServer.BM_BM)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.BM_ブックマーク.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.BR_カテゴリマスタ.#ctor(System.Object)">
+ コンストラクタ
+</member>
+<member name="M:JSServer.BR_カテゴリマスタ.登録(JSServer.BR_カテゴリ)">
+ カテゴリデータをCSVに追加する、同じカテゴリ番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.BR_カテゴリマスタ.Deleteレコード">
+Keyで指定したレコードを削除する　　全部消す
+</member>
+<member name="M:JSServer.BR_カテゴリマスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.BR_カテゴリマスタ.カンマ区切り(JSServer.BR_カテゴリ)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.BR_カテゴリマスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.BR_グループマスタ.#ctor(System.Object)">
+ コンストラクタ
+</member>
+<member name="M:JSServer.BR_グループマスタ.登録(JSServer.BR_グループ)">
+ カテゴリデータをCSVに追加する、同じカテゴリ番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.BR_グループマスタ.Deleteレコード">
+Keyで指定したレコードを削除する　　全部消す
+</member>
+<member name="M:JSServer.BR_グループマスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.BR_グループマスタ.カンマ区切り(JSServer.BR_グループ)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.BR_グループマスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りのデータを、配列に登録する
+
+</member>
+<member name="M:JSServer.B_区分マスタ.#ctor(System.Object)">
+ コンストラクタ
+</member>
+<member name="M:JSServer.B_区分マスタ.登録(JSServer.B_区分)">
+ 区分データをCSVに追加する、同じ区分記号の時は更新する
+ 
+</member>
+<member name="M:JSServer.B_区分マスタ.Deleteレコード">
+Keyで指定したレコードを削除する　　全部消す
+</member>
+<member name="M:JSServer.B_区分マスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.B_区分マスタ.カンマ区切り(JSServer.B_区分)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.B_区分マスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.C_ラウンドマスタ.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.C_ラウンドマスタ.登録(JSServer.C_ラウンド)">
+ 区分データをCSVに追加する、同じ区分番号・ラウンド番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.C_ラウンドマスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.C_ラウンドマスタ.カンマ区切り(JSServer.C_ラウンド)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.C_ラウンドマスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.D_種目マスタ.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.D_種目マスタ.登録(JSServer.D_種目)">
+ 区分データをCSVに追加する、同じ区分番号・ラウンド番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.D_種目マスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.D_種目マスタ.カンマ区切り(JSServer.D_種目)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.D_種目マスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.E_ヒート表マスタ.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.E_ヒート表マスタ.Read(System.String,System.String)">
+ 区分番号とラウンド番号を指定して、ヒート表を読み込む
+ 
+</member>
+<member name="M:JSServer.E_ヒート表マスタ.登録(JSServer.E_ヒート表,System.String,System.String)">
+ 区分データをCSVに追加する、同じ区分番号・ラウンド番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.E_ヒート表マスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.E_ヒート表マスタ.カンマ区切り(JSServer.E_ヒート表)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.E_ヒート表マスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りのヒートデータを、配列に登録する
+
+</member>
+<member name="M:JSServer.F_審判担当PCSマスタ.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.F_審判担当PCSマスタ.Read(System.String,System.String)">
+ 区分番号とラウンド番号を指定して、担当PCS表を読み込む
+ 
+</member>
+<member name="M:JSServer.F_審判担当PCSマスタ.登録(JSServer.F_審判担当PCS)">
+ 区分データをCSVに追加する、同じ区分番号・ラウンド番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.F_審判担当PCSマスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.F_審判担当PCSマスタ.カンマ区切り(JSServer.F_審判担当PCS)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.F_審判担当PCSマスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.JA_分析CSV.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.JA_分析CSV.FileRead(System.String,System.String,System.String)">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.JA_分析CSV.カンマ区切り(JSServer.JA_分析)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.JA_分析CSV.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りのデータを、配列に登録する
+
+</member>
+<member name="M:JSServer.J_新審判設定.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.J_新審判設定.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.K_団体区分マスタ.#ctor(System.Object)">
+ コンストラクタ
+</member>
+<member name="M:JSServer.K_団体区分マスタ.登録(JSServer.K_団体区分)">
+ 区分データをCSVに追加する、同じ区分記号の時は更新する
+ 
+</member>
+<member name="M:JSServer.K_団体区分マスタ.Deleteレコード">
+Keyで指定したレコードを削除する　　全部消す
+</member>
+<member name="M:JSServer.K_団体区分マスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.K_団体区分マスタ.カンマ区切り(JSServer.K_団体区分)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.K_団体区分マスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.K_総合結果設定.#ctor(System.Object)">
+ コンストラクタ
+</member>
+<member name="M:JSServer.K_総合結果設定.登録(JSServer.K_総合設定)">
+ 区分データをCSVに追加する、同じ区分記号の時は更新する
+ 
+</member>
+<member name="M:JSServer.K_総合結果設定.Deleteレコード">
+Keyで指定したレコードを削除する　　全部消す
+</member>
+<member name="M:JSServer.K_総合結果設定.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.K_総合結果設定.カンマ区切り(JSServer.K_総合設定)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.K_総合結果設定.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.R_印刷設定マスタ.#ctor(System.Object)">
+ コンストラクタ
+</member>
+<member name="M:JSServer.R_印刷設定マスタ.登録(JSServer.R_印刷設定)">
+ 区分データをCSVに追加する、同じ区分記号の時は更新する
+ 
+</member>
+<member name="M:JSServer.R_印刷設定マスタ.Deleteレコード">
+Keyで指定したレコードを削除する　　全部消す
+</member>
+<member name="M:JSServer.R_印刷設定マスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.R_印刷設定マスタ.カンマ区切り(JSServer.R_印刷設定)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.R_印刷設定マスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.SC_BR_Resultマスタ.#ctor(System.Object)">
+ コンストラクタ
+</member>
+<member name="M:JSServer.SC_BR_Resultマスタ.登録(JSServer.SC_BR_Result)">
+ 区分データをCSVに追加する、同じ区分記号の時は更新する
+ 
+</member>
+<member name="M:JSServer.SC_BR_Resultマスタ.Deleteレコード">
+Keyで指定したレコードを削除する　　全部消す
+</member>
+<member name="M:JSServer.SC_BR_Resultマスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.SC_BR_Resultマスタ.カンマ区切り(JSServer.SC_BR_Result)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.SC_BR_Resultマスタ.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.SC_Total_Result.#ctor(System.String)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.SC_Total_Result.FileRead(System.String,System.String)">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.T_採点進行管理.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.T_採点進行管理.Get_次競技番号(System.String)">
+次の採点種目(リアルタイム）を検索
+</member>
+<member name="M:JSServer.T_採点進行管理.登録(JSServer.T_採点進行)">
+ 採点進行データをCSVに追加する、同じ競技番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.T_採点進行管理.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.T_採点進行管理.カンマ区切り(JSServer.T_採点進行)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.T_採点進行管理.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りのデータを、配列に登録する
+
+</member>
+<member name="M:JSServer.S_採点結果.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.S_採点結果.Read(System.String,System.String,System.String,System.String)">
+ 区分番号とラウンド番号、ジャッジ記号を指定して、採点表を読み込む
+ 
+</member>
+<member name="M:JSServer.S_採点結果.登録(JSServer.S_採点)">
+ 採点データをCSVに追加する、同じ背番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.S_採点結果.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.S_採点結果.カンマ区切り(JSServer.S_採点)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.S_採点結果.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.U_進行管理.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.U_進行管理.登録(JSServer.U_進行)">
+ 採点進行データをCSVに追加する、同じ競技番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.U_進行管理.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.U_進行管理.Deleteレコード">
+Keyで指定したレコードを削除する　　全部消す
+</member>
+<member name="M:JSServer.U_進行管理.カンマ区切り(JSServer.U_進行)">
+ 個別の区分データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.U_進行管理.Addデータ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.Z_システム設定.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.審判員マスタ.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.審判員マスタ.審判員登録(JSServer.審判)">
+ 審判データをCSVに追加する、同じ審判記号の時は更新する
+ 
+</member>
+<member name="M:JSServer.審判員マスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.審判員マスタ.審判員カンマ区切り(JSServer.審判)">
+ 個別の審判員データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.審判員マスタ.Add審判員データ(System.String)">
+ ファイルから読み込んだ カンマ区切りの審判員データを、配列に登録する
+
+</member>
+<member name="M:JSServer.選手マスタ.#ctor(System.Object)">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.選手マスタ.Get選手C_by背番号(System.String,System.String)">
+ 背番号を渡すと選手Classを返す
+</member>
+<member name="M:JSServer.選手マスタ.選手登録(System.Int32,JSServer.選手)">
+ 選手データをCSVに追加する、同じ背番号の時は更新する
+ 
+</member>
+<member name="M:JSServer.選手マスタ.FileRead">
+ 読込み
+ 
+</member>
+<member name="M:JSServer.選手マスタ.選手カンマ区切り(JSServer.選手)">
+ 個別の選手データをカンマ区切りの文字列に変換する
+
+</member>
+<member name="M:JSServer.選手マスタ.Add選手データ(System.String,System.String)">
+ ファイルから読み込んだ カンマ区切りの選手データを、配列に登録する
+
+</member>
+<member name="T:JSServer.SftpService">
+ <summary>
+ SftpService - SFTP Utility Class
+ </summary>
+</member>
+<member name="M:JSServer.SftpService.#ctor(System.String,System.Int32,System.String,System.String)">
+ <summary>Standard constructor for username/password authentication</summary>
+ <param name="hostName">SFTP hostname</param>
+ <param name="username">SFTP account username</param>
+ <param name="password">SFTP account password</param>
+</member>
+<member name="M:JSServer.SftpService.#ctor(System.String,System.String,System.String,System.String)">
+ <summary>Standard constructor for username/certificate authentication</summary>
+ <param name="hostName">SFTP hostname</param>
+ <param name="username">SFTP account username</param>
+ <param name="privateKeyPassword">Private key password, <c>String</c> if password needed,
+ <c>Nothing</c> if not password protected</param>
+</member>
+<member name="M:JSServer.SftpService.ConvertToUnsecureString(System.Security.SecureString)">
+ <summary>Utility method to get string from SecureString</summary>
+ <param name="secureString">SecureString to convert to unsecured String</param>
+ <returns>Unsecured String</returns>
+</member>
+<member name="M:JSServer.SftpService.CreateSessionOptions">
+ <summary>Shared function to configure connection (to be called once only)</summary>
+ <returns>Populated and configured <c>SessionOptions</c> object</returns>
+</member>
+<member name="M:JSServer.SftpService.DeleteFile(System.String)">
+ <summary>Delete a specific file</summary>
+ <param name="filename">The remote filename to delete</param>
+ <returns><c>True</c> if successfully deleted or <c>False</c> otherwise</returns>
+</member>
+<member name="M:JSServer.SftpService.ListFiles">
+ <summary>List files from current directory</summary>
+ <returns><c>RemoteFileInfoCollection</c> with result and list of files</returns>
+</member>
+<member name="M:JSServer.SftpService.ListFiles(System.String)">
+ <summary><para>List files from specific directory (usually complete starting at root
+ /home/user/folder, etc)</para></summary>
+ <param name="path">Remote server path or Nothing to list current directory</param>
+ <returns><c>RemoteFileInfoCollection</c> with result and list of files</returns>
+</member>
+<member name="M:JSServer.SftpService.UploadFile(System.String)">
+ <summary>
+ Upload a file to the remote server
+ </summary>
+ <param name="filePath">Local fully qualified path to the file to upload</param>
+ <returns><c>True</c> if successful, <c>False</c> otherwise</returns>
+</member>
+<member name="M:JSServer.SftpService.UploadFile(System.String,System.String)">
+ <summary>
+ Upload a file to the remote server with a specified remote path
+ </summary>
+ <param name="filePath">Local fully qualified path to the file to upload</param>
+ <param name="remoteFilePath">Remote path to put file or different name to use for upload</param>
+ <returns><c>True</c> if successful, <c>False</c> otherwise</returns>
+</member>
+<member name="M:JSServer.TCPClient2.#ctor">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.TCPClient2.Send(System.String)">
+ <summary>
+ 文字列を送信する
+ </summary>
+ <param name="str">送信する文字列</param>
+</member>
+<member name="M:JSServer.TCPClient2.Close">
+ <summary>
+ 切断する
+ </summary>
+</member>
+<member name="P:JSServer.TCPClient2.IsClosed">
+ <summary>
+ 閉じているか
+ </summary>
+</member>
+<member name="F:JSServer.TCPClient2.receivedBytes">
+ 受信したデータ
+</member>
+<member name="F:JSServer.TCPClient2._localEndPoint">
+ <summary>
+ ローカルエンドポイント
+ </summary>
+</member>
+<member name="F:JSServer.TCPClient2._remoteEndPoint">
+ <summary>
+ リモートエンドポイント
+ </summary>
+</member>
+<member name="E:JSServer.TCPClient2.Disconnected2">
+ サーバーから切断された、あるいは切断した
+</member>
+<member name="E:JSServer.TCPServer2.AcceptedClient2">
+ <summary>
+ クライアントを受け入れた
+ </summary>
+</member>
+<member name="E:JSServer.TCPServer2.ReceivedData2">
+ <summary>
+ クライアントがデータを受信した
+ </summary>
+</member>
+<member name="E:JSServer.TCPServer2.DisconeetctedClent2">
+ <summary>
+ クライアントが切断した
+ </summary>
+</member>
+<member name="P:JSServer.TCPServer2.AcceptedClients">
+ <summary>
+ 接続中のクライアント
+ </summary>
+</member>
+<member name="M:JSServer.TCPServer2.SendToAllClients(System.String)">
+ <summary>
+ 接続中のすべてのクライアントに文字列を送信する
+ </summary>
+ <param name="str">送信する文字列</param>
+</member>
+<member name="M:JSServer.JS_DFile_C.LeftB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_DFile_C.MidB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の指定されたバイト位置以降のすべての文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iStart">
+     取り出しを開始する位置。</param>
+ <returns>
+     指定されたバイト位置以降のすべての文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_DFile_C.MidB(System.String,System.Int32,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の指定されたバイト位置から、指定されたバイト数分の文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iStart">
+     取り出しを開始する位置。</param>
+ <param name="iByteSize">
+     取り出すバイト数。</param>
+ <returns>
+     指定されたバイト位置から指定されたバイト数分の文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_DFile_C.RightB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の右端から指定されたバイト数分の文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iByteSize">
+     取り出すバイト数。</param>
+ <returns>
+     右端から指定されたバイト数分の文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.LOG_C.#ctor">
+
+  コンストラクタ
+ 
+</member>
+<member name="M:JSServer.LOG_C.SetLogLevel(System.Int32)">
+
+  ログレベルをセット
+ 
+</member>
+<member name="M:JSServer.LOG_C.CreateFile">
+
+  ファイル作成
+ 
+</member>
+<member name="M:JSServer.LOG_C.LogAdd(System.String,System.Int32)">
+
+  ログを追加する
+  
+</member>
+<member name="M:JSServer.LOG_C.Set_ON">
+
+  ログ開始FLAGをON
+  
+</member>
+<member name="M:JSServer.LOG_C.Set_OFF">
+
+  ログ開始FLAGをOFF
+  
+</member>
+<member name="M:JSServer.TCPClient.#ctor">
+ コンストラクタ
+ 
+</member>
+<member name="M:JSServer.TCPClient.Send(System.String)">
+ <summary>
+ 文字列を送信する
+ </summary>
+ <param name="str">送信する文字列</param>
+</member>
+<member name="M:JSServer.TCPClient.Close">
+ <summary>
+ 切断する
+ </summary>
+</member>
+<member name="P:JSServer.TCPClient.IsClosed">
+ <summary>
+ 閉じているか
+ </summary>
+</member>
+<member name="F:JSServer.TCPClient.receivedBytes">
+ 受信したデータ
+</member>
+<member name="F:JSServer.TCPClient._localEndPoint">
+ <summary>
+ ローカルエンドポイント
+ </summary>
+</member>
+<member name="F:JSServer.TCPClient._remoteEndPoint">
+ <summary>
+ リモートエンドポイント
+ </summary>
+</member>
+<member name="E:JSServer.TCPClient.Disconnected">
+ サーバーから切断された、あるいは切断した
+</member>
+<member name="E:JSServer.TCPServer.AcceptedClient">
+ <summary>
+ クライアントを受け入れた
+ </summary>
+</member>
+<member name="E:JSServer.TCPServer.ReceivedData">
+ <summary>
+ クライアントがデータを受信した
+ </summary>
+</member>
+<member name="E:JSServer.TCPServer.DisconeetctedClent">
+ <summary>
+ クライアントが切断した
+ </summary>
+</member>
+<member name="P:JSServer.TCPServer.AcceptedClients">
+ <summary>
+ 接続中のクライアント
+ </summary>
+</member>
+<member name="M:JSServer.TCPServer.SendToAllClients(System.String)">
+ <summary>
+ 接続中のすべてのクライアントに文字列を送信する
+ </summary>
+ <param name="str">送信する文字列</param>
+</member>
+<member name="M:JSServer.RPT_F1_決勝進出者名簿.LenB(System.String)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     半角 1 バイト、全角 2 バイトとして、指定された文字列のバイト数を返します。</summary>
+ <param name="stTarget">
+     バイト数取得の対象となる文字列。</param>
+ <returns>
+     半角 1 バイト、全角 2 バイトでカウントされたバイト数。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.RPT_FL_入賞者名簿.LenB(System.String)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     半角 1 バイト、全角 2 バイトとして、指定された文字列のバイト数を返します。</summary>
+ <param name="stTarget">
+     バイト数取得の対象となる文字列。</param>
+ <returns>
+     半角 1 バイト、全角 2 バイトでカウントされたバイト数。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.RPT_PT_点数表.LenB(System.String)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     半角 1 バイト、全角 2 バイトとして、指定された文字列のバイト数を返します。</summary>
+ <param name="stTarget">
+     バイト数取得の対象となる文字列。</param>
+ <returns>
+     半角 1 バイト、全角 2 バイトでカウントされたバイト数。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.種目結果.FileRead(System.String,System.String,System.String,System.String)">
+ 採点ファイルの読込み
+ 読み込んで、選手().審判（）.PCS素点 に格納する
+</member>
+<member name="M:JSServer.JS_Comp_C.LeftB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_Comp_C.MidB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の指定されたバイト位置以降のすべての文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iStart">
+     取り出しを開始する位置。</param>
+ <returns>
+     指定されたバイト位置以降のすべての文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_Comp_C.MidB(System.String,System.Int32,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の指定されたバイト位置から、指定されたバイト数分の文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iStart">
+     取り出しを開始する位置。</param>
+ <param name="iByteSize">
+     取り出すバイト数。</param>
+ <returns>
+     指定されたバイト位置から指定されたバイト数分の文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_Comp_C.RightB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の右端から指定されたバイト数分の文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iByteSize">
+     取り出すバイト数。</param>
+ <returns>
+     右端から指定されたバイト数分の文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_Member_C.LeftB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_Member_C.MidB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の指定されたバイト位置以降のすべての文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iStart">
+     取り出しを開始する位置。</param>
+ <returns>
+     指定されたバイト位置以降のすべての文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_Member_C.MidB(System.String,System.Int32,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の指定されたバイト位置から、指定されたバイト数分の文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iStart">
+     取り出しを開始する位置。</param>
+ <param name="iByteSize">
+     取り出すバイト数。</param>
+ <returns>
+     指定されたバイト位置から指定されたバイト数分の文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.JS_Member_C.RightB(System.String,System.Int32)">
+ -----------------------------------------------------------------------------------------
+ <summary>
+     文字列の右端から指定されたバイト数分の文字列を返します。</summary>
+ <param name="stTarget">
+     取り出す元になる文字列。</param>
+ <param name="iByteSize">
+     取り出すバイト数。</param>
+ <returns>
+     右端から指定されたバイト数分の文字列。</returns>
+ -----------------------------------------------------------------------------------------
+</member>
+<member name="M:JSServer.FP01_進捗状況.#ctor(System.String,System.ComponentModel.DoWorkEventHandler,System.Object)">
+ <summary>
+ バックグラウンド処理の進行状況を表示するフォーム
+ </summary>
+</member>
+<member name="M:JSServer.FP01_進捗状況.#ctor(System.String,System.ComponentModel.DoWorkEventHandler)">
+ <summary>
+ ProgressDialogクラスのコンストラクタ
+ </summary>
+</member>
+<member name="P:JSServer.FP01_進捗状況.Result">
+ <summary>
+ DoWorkイベントハンドラで設定された結果
+ </summary>
+</member>
+<member name="P:JSServer.FP01_進捗状況.Error">
+ <summary>
+ バックグラウンド処理中に発生したエラー
+ </summary>
+</member>
+<member name="P:JSServer.FP01_進捗状況.BackgroundWorker">
+ <summary>
+ 進行状況ダイアログで使用しているBackgroundWorkerクラス
+ </summary>
+</member>
+</members>
+</doc>

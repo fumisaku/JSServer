@@ -14,6 +14,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,17 +49,98 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon1.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.2.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="MailKit, Version=4.2.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.4.2.0\lib\netstandard2.0\MailKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.900.148\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeKit, Version=4.2.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.4.2.0\lib\netstandard2.0\MimeKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Formats.Asn1, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Formats.Asn1.7.0.0\lib\netstandard2.0\System.Formats.Asn1.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Cng, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Cng.5.0.0\lib\net461\System.Security.Cryptography.Cng.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Pkcs, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Pkcs.7.0.2\lib\netstandard2.0\System.Security.Cryptography.Pkcs.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.7.0.0\lib\netstandard2.0\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="WebDriver, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.4.13.1\lib\netstandard2.0\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WinSCPnet, Version=1.2.10.6257, Culture=neutral, PublicKeyToken=2271ec4a3c56d0bf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\WinSCPnet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -73,8 +156,159 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSV管理\A_競技会マスタ.vb" />
+    <Compile Include="CSV管理\BM_BM.vb" />
+    <Compile Include="CSV管理\BM_ブックマーク.vb" />
+    <Compile Include="CSV管理\BR_カテゴリ.vb" />
+    <Compile Include="CSV管理\BR_カテゴリマスタ.vb" />
+    <Compile Include="CSV管理\BR_グループ.vb" />
+    <Compile Include="CSV管理\BR_グループマスタ.vb" />
+    <Compile Include="CSV管理\B_区分.vb" />
+    <Compile Include="CSV管理\B_区分マスタ.vb" />
+    <Compile Include="CSV管理\C_ラウンド.vb" />
+    <Compile Include="CSV管理\C_ラウンドマスタ.vb" />
+    <Compile Include="CSV管理\D_種目.vb" />
+    <Compile Include="CSV管理\D_種目マスタ.vb" />
+    <Compile Include="CSV管理\E_ヒート表.vb" />
+    <Compile Include="CSV管理\E_ヒート表マスタ.vb" />
+    <Compile Include="CSV管理\F_審判担当PCS.vb" />
+    <Compile Include="CSV管理\F_審判担当PCSマスタ.vb" />
+    <Compile Include="CSV管理\G_審判無効.vb" />
+    <Compile Include="CSV管理\JA_分析.vb" />
+    <Compile Include="CSV管理\JA_分析CSV.vb" />
+    <Compile Include="CSV管理\J_PCS担当.vb" />
+    <Compile Include="CSV管理\J_PCS設定.vb" />
+    <Compile Include="CSV管理\J_TES減点設定.vb" />
+    <Compile Include="CSV管理\J_新審判設定.vb" />
+    <Compile Include="CSV管理\J_既定種目順.vb" />
+    <Compile Include="CSV管理\J_減点設定.vb" />
+    <Compile Include="CSV管理\J_課題設定.vb" />
+    <Compile Include="CSV管理\K_団体区分マスタ.vb" />
+    <Compile Include="CSV管理\K_総合結果設定.vb" />
+    <Compile Include="CSV管理\R_印刷設定.vb" />
+    <Compile Include="CSV管理\R_印刷設定マスタ.vb" />
+    <Compile Include="CSV管理\SC_BR_Result.vb" />
+    <Compile Include="CSV管理\SC_BR_Resultマスタ.vb" />
+    <Compile Include="CSV管理\SC_J_区分結果.vb" />
+    <Compile Include="CSV管理\SC_スタートリスト_J.vb" />
+    <Compile Include="CSV管理\SC_Total_Result.vb" />
+    <Compile Include="CSV管理\SC_Total_Startlist.vb" />
+    <Compile Include="CSV管理\SC_J_詳細結果.vb" />
+    <Compile Include="CSV管理\SC_マスタデータ_J.vb" />
+    <Compile Include="CSV管理\S_採点結果_BR2_J.vb" />
+    <Compile Include="CSV管理\S_採点結果_J.vb" />
+    <Compile Include="CSV管理\S_採点結果_V2_J.vb" />
+    <Compile Include="CSV管理\T_採点進行.vb" />
+    <Compile Include="CSV管理\T_採点進行管理.vb" />
+    <Compile Include="CSV管理\S_採点.vb" />
+    <Compile Include="CSV管理\S_採点結果.vb" />
+    <Compile Include="CSV管理\U_進行.vb" />
+    <Compile Include="CSV管理\U_進行管理.vb" />
+    <Compile Include="CSV管理\VAL_1_素点.vb" />
+    <Compile Include="CSV管理\VAL_2_平均点.vb" />
+    <Compile Include="CSV管理\V_VALQオーディエンス_C.vb" />
+    <Compile Include="CSV管理\Z_システム設定.vb" />
+    <Compile Include="CSV管理\Z_種目名.vb" />
+    <Compile Include="CSV管理\マスタデータ.vb" />
+    <Compile Include="CSV管理\審判.vb" />
+    <Compile Include="CSV管理\審判員マスタ.vb" />
     <Compile Include="CSV管理\選手.vb" />
     <Compile Include="CSV管理\選手マスタ.vb" />
+    <Compile Include="HTML\BJS得点詳細.vb" />
+    <Compile Include="HTML\BJS得点詳細_V2.vb" />
+    <Compile Include="HTML\BJS得点詳細ソロ.vb" />
+    <Compile Include="HTML\VAL得点詳細.vb" />
+    <Compile Include="HTML\PDJ得点詳細.vb" />
+    <Compile Include="HTML\SftpService.vb" />
+    <Compile Include="HTML\SFTP_C.vb" />
+    <Compile Include="HTML\チェック法得点詳細.vb" />
+    <Compile Include="HTML\区分一覧HTML.vb" />
+    <Compile Include="HTML\ラウンド一覧.vb" />
+    <Compile Include="HTML\H3_ヒート表.vb" />
+    <Compile Include="HTML\競技会一覧HTML.vb" />
+    <Compile Include="HTML\順位法得点詳細.vb" />
+    <Compile Include="ジャッジ分析\JA分析_C.vb" />
+    <Compile Include="ReceivedDataEventArgs2.vb" />
+    <Compile Include="ServerEventArgs2.vb" />
+    <Compile Include="TCPClient2.vb" />
+    <Compile Include="TCPServer2.vb" />
+    <Compile Include="ジャッジ分析\XL_NJ_Graph_J.vb" />
+    <Compile Include="ジャッジ分析\xl_ジャッジ分析_1.vb" />
+    <Compile Include="ジャッジ分析\xl_ジャッジ分析_2.vb" />
+    <Compile Include="スケーティング_C.vb" />
+    <Compile Include="採点\団体結果_J.vb" />
+    <Compile Include="採点\団体集計方法_J.vb" />
+    <Compile Include="CSV管理\K_総合結果設定_J.vb" />
+    <Compile Include="採点\総合結果_J.vb" />
+    <Compile Include="採点結果_V2.vb" />
+    <Compile Include="支援システム\JS_DFile_C.vb" />
+    <Compile Include="支援システム\JS_HFile_C.vb" />
+    <Compile Include="画面\F113_BRカテゴリ設定.Designer.vb">
+      <DependentUpon>F113_BRカテゴリ設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F113_BRカテゴリ設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F114_BR区分設定.Designer.vb">
+      <DependentUpon>F114_BR区分設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F114_BR区分設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F150_団体区分設定.Designer.vb">
+      <DependentUpon>F150_団体区分設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F150_団体区分設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F151_団体集計方法設定.Designer.vb">
+      <DependentUpon>F151_団体集計方法設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F151_団体集計方法設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F152_団体集計.Designer.vb">
+      <DependentUpon>F152_団体集計.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F152_団体集計.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F153_団体結果.Designer.vb">
+      <DependentUpon>F153_団体結果.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F153_団体結果.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F154_団体区分結果.Designer.vb">
+      <DependentUpon>F154_団体区分結果.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F154_団体区分結果.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F160_総合結果設定.Designer.vb">
+      <DependentUpon>F160_総合結果設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F160_総合結果設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F161_総合結果.Designer.vb">
+      <DependentUpon>F161_総合結果.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F161_総合結果.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F302_BRHTML作成.Designer.vb">
+      <DependentUpon>F302_BRHTML作成.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F302_BRHTML作成.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F501_得点詳細_C.Designer.vb">
+      <DependentUpon>F501_得点詳細_C.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F501_得点詳細_C.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +316,14 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="F_GM.Designer.vb">
+      <DependentUpon>F_GM.vb</DependentUpon>
+    </Compile>
+    <Compile Include="F_GM.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HTML\AJS得点詳細.vb" />
+    <Compile Include="LOG_C.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -97,13 +339,350 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ReceivedDataEventArgs.vb" />
+    <Compile Include="ServerEventArgs.vb" />
+    <Compile Include="TCPClient.vb" />
+    <Compile Include="TCPServer.vb" />
+    <Compile Include="帳票\RPT_F1_決勝進出者名簿.vb" />
+    <Compile Include="帳票\RPT_FL_入賞者名簿.vb" />
+    <Compile Include="帳票\RPT_PT_点数表.vb" />
+    <Compile Include="帳票\RPT_H3_出場者ヒート表.vb" />
+    <Compile Include="帳票\RPT_H2_出場者連絡票.vb" />
+    <Compile Include="帳票\RPT_H1_出場者連絡票.vb" />
+    <Compile Include="帳票\RPT_R3_縦マスタ01.vb" />
+    <Compile Include="帳票\RPT_R2_横マスタ01.vb" />
+    <Compile Include="帳票\RPT_R1_ヒート表マスタ.vb" />
+    <Compile Include="帳票\RPT_Parm_H2.vb" />
+    <Compile Include="帳票\RPT_Parm_H1.vb" />
+    <Compile Include="帳票\RPT_Parm_共通.vb" />
+    <Compile Include="帳票\帳票印刷.vb" />
+    <Compile Include="採点結果_C.vb" />
+    <Compile Include="支援システム\JS_Comp_C.vb" />
+    <Compile Include="支援システム\JS_Comp_区分_C.vb" />
+    <Compile Include="支援システム\JS_Comp_審判員_C.vb" />
+    <Compile Include="支援システム\JS_Member_C.vb" />
+    <Compile Include="支援システム\JS_変換_C.vb" />
+    <Compile Include="画面\F100_競技会設定.Designer.vb">
+      <DependentUpon>F100_競技会設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F100_競技会設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F110_区分一覧設定.Designer.vb">
+      <DependentUpon>F110_区分一覧設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F110_区分一覧設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F111_区分設定.Designer.vb">
+      <DependentUpon>F111_区分設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F111_区分設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F112_競技種目設定.Designer.vb">
+      <DependentUpon>F112_競技種目設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F112_競技種目設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F120_採点進行設定.Designer.vb">
+      <DependentUpon>F120_採点進行設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F120_採点進行設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F121_採点進行確認.Designer.vb">
+      <DependentUpon>F121_採点進行確認.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F121_採点進行確認.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F130_選手マスタ設定.Designer.vb">
+      <DependentUpon>F130_選手マスタ設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F130_選手マスタ設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F140_ジャッジ設定.Designer.vb">
+      <DependentUpon>F140_ジャッジ設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F140_ジャッジ設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F200_採点進行確認.Designer.vb">
+      <DependentUpon>F200_採点進行確認.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F200_採点進行確認.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F300_印刷画面.Designer.vb">
+      <DependentUpon>F300_印刷画面.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F300_印刷画面.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F301_印刷設定.Designer.vb">
+      <DependentUpon>F301_印刷設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F301_印刷設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F510_UP数確定.Designer.vb">
+      <DependentUpon>F510_UP数確定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F510_UP数確定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F511_ヒート表作成.Designer.vb">
+      <DependentUpon>F511_ヒート表作成.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F511_ヒート表作成.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F512_PCS担当設定.Designer.vb">
+      <DependentUpon>F512_PCS担当設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F512_PCS担当設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F513_結果入力.Designer.vb">
+      <DependentUpon>F513_結果入力.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F513_結果入力.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F514_UP数確定_プレセレクション.Designer.vb">
+      <DependentUpon>F514_UP数確定_プレセレクション.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F514_UP数確定_プレセレクション.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F520_同点決勝設定.Designer.vb">
+      <DependentUpon>F520_同点決勝設定.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F520_同点決勝設定.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F530_区分結果表示.Designer.vb">
+      <DependentUpon>F530_区分結果表示.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F530_区分結果表示.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F600_進行管理.Designer.vb">
+      <DependentUpon>F600_進行管理.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F600_進行管理.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F601_名簿.Designer.vb">
+      <DependentUpon>F601_名簿.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F601_名簿.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F602_進行詳細.Designer.vb">
+      <DependentUpon>F602_進行詳細.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F602_進行詳細.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F603_区分一覧.Designer.vb">
+      <DependentUpon>F603_区分一覧.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F603_区分一覧.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F901_支援システム取り込み.Designer.vb">
+      <DependentUpon>F901_支援システム取り込み.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F901_支援システム取り込み.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\F902_支援システム集計.Designer.vb">
+      <DependentUpon>F902_支援システム集計.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\F902_支援システム集計.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\FGM01_端末一覧.Designer.vb">
+      <DependentUpon>FGM01_端末一覧.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\FGM01_端末一覧.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\FGM02_関連端末一覧.Designer.vb">
+      <DependentUpon>FGM02_関連端末一覧.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\FGM02_関連端末一覧.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="画面\FP01_進捗状況.Designer.vb">
+      <DependentUpon>FP01_進捗状況.vb</DependentUpon>
+    </Compile>
+    <Compile Include="画面\FP01_進捗状況.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="移行\CompCSV_C.vb" />
+    <Compile Include="移行\DanceCSV_C.vb" />
+    <Compile Include="移行\NJ_Comp_C.vb" />
+    <Compile Include="移行\NJ_Judge_C.vb" />
+    <Compile Include="移行\NJ_Member_C.vb" />
+    <Compile Include="移行\移行MAIN.Designer.vb">
+      <DependentUpon>移行MAIN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="移行\移行MAIN.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="結果決定EventArgs.vb" />
+    <Compile Include="電文\DEVENT_PARM_C.vb" />
+    <Compile Include="電文\KANS_FF_KUBUN.vb" />
+    <Compile Include="電文\KANS_FF_RESULT.vb" />
+    <Compile Include="電文\KANS_HEAT.vb" />
+    <Compile Include="電文\KANS_JUDGE.vb" />
+    <Compile Include="電文\KANS_MA_COMP.vb" />
+    <Compile Include="電文\KANS_MB_KUBUN.vb" />
+    <Compile Include="電文\KANS_MOVIE_START_J.vb" />
+    <Compile Include="電文\KANS_MU_Progress.vb" />
+    <Compile Include="電文\KANS_RESULT.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="帳票\帳票定義\RPT_R1_ヒート表マスタ.rdlc" />
+    <EmbeddedResource Include="帳票\帳票定義\RPT_R2_横マスタ03.rdlc" />
+    <EmbeddedResource Include="帳票\帳票定義\RPT_R2_横マスタ01_E.rdlc" />
+    <EmbeddedResource Include="帳票\帳票定義\RPT_R2_横マスタ01.rdlc" />
+    <EmbeddedResource Include="帳票\帳票定義\RPT_R3_縦マスタ01.rdlc" />
+    <EmbeddedResource Include="帳票\帳票定義\RPT_R3_縦マスタ01_E.rdlc" />
+    <EmbeddedResource Include="画面\F113_BRカテゴリ設定.resx">
+      <DependentUpon>F113_BRカテゴリ設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F114_BR区分設定.resx">
+      <DependentUpon>F114_BR区分設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F150_団体区分設定.resx">
+      <DependentUpon>F150_団体区分設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F151_団体集計方法設定.resx">
+      <DependentUpon>F151_団体集計方法設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F152_団体集計.resx">
+      <DependentUpon>F152_団体集計.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F153_団体結果.resx">
+      <DependentUpon>F153_団体結果.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F154_団体区分結果.resx">
+      <DependentUpon>F154_団体区分結果.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F160_総合結果設定.resx">
+      <DependentUpon>F160_総合結果設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F161_総合結果.resx">
+      <DependentUpon>F161_総合結果.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F302_BRHTML作成.resx">
+      <DependentUpon>F302_BRHTML作成.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F501_得点詳細_C.resx">
+      <DependentUpon>F501_得点詳細_C.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_GM.resx">
+      <DependentUpon>F_GM.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="帳票\RPT_H1_ヒート表 - コピー.rdlc" />
+    <EmbeddedResource Include="画面\F100_競技会設定.resx">
+      <DependentUpon>F100_競技会設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F110_区分一覧設定.resx">
+      <DependentUpon>F110_区分一覧設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F111_区分設定.resx">
+      <DependentUpon>F111_区分設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F112_競技種目設定.resx">
+      <DependentUpon>F112_競技種目設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F120_採点進行設定.resx">
+      <DependentUpon>F120_採点進行設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F121_採点進行確認.resx">
+      <DependentUpon>F121_採点進行確認.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F130_選手マスタ設定.resx">
+      <DependentUpon>F130_選手マスタ設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F140_ジャッジ設定.resx">
+      <DependentUpon>F140_ジャッジ設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F200_採点進行確認.resx">
+      <DependentUpon>F200_採点進行確認.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F300_印刷画面.resx">
+      <DependentUpon>F300_印刷画面.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F301_印刷設定.resx">
+      <DependentUpon>F301_印刷設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F510_UP数確定.resx">
+      <DependentUpon>F510_UP数確定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F511_ヒート表作成.resx">
+      <DependentUpon>F511_ヒート表作成.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F512_PCS担当設定.resx">
+      <DependentUpon>F512_PCS担当設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F513_結果入力.resx">
+      <DependentUpon>F513_結果入力.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F514_UP数確定_プレセレクション.resx">
+      <DependentUpon>F514_UP数確定_プレセレクション.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F520_同点決勝設定.resx">
+      <DependentUpon>F520_同点決勝設定.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F530_区分結果表示.resx">
+      <DependentUpon>F530_区分結果表示.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F600_進行管理.resx">
+      <DependentUpon>F600_進行管理.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F601_名簿.resx">
+      <DependentUpon>F601_名簿.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F602_進行詳細.resx">
+      <DependentUpon>F602_進行詳細.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F603_区分一覧.resx">
+      <DependentUpon>F603_区分一覧.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F901_支援システム取り込み.resx">
+      <DependentUpon>F901_支援システム取り込み.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\F902_支援システム集計.resx">
+      <DependentUpon>F902_支援システム集計.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\FGM01_端末一覧.resx">
+      <DependentUpon>FGM01_端末一覧.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\FGM02_関連端末一覧.resx">
+      <DependentUpon>FGM02_関連端末一覧.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="画面\FP01_進捗状況.resx">
+      <DependentUpon>FP01_進捗状況.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="移行\移行MAIN.resx">
+      <DependentUpon>移行MAIN.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +696,32 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon1.ico" />
+    <Content Include="SqlServerTypes\Loader.cs" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="..\packages\Selenium.WebDriver.4.13.1\build\Selenium.WebDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.4.13.1\build\Selenium.WebDriver.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Selenium.WebDriver.4.13.1\build\Selenium.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.4.13.1\build\Selenium.WebDriver.targets'))" />
+  </Target>
 </Project>
