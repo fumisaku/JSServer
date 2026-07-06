@@ -48,6 +48,7 @@ Public Class TCPClient
         _socket = New Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
 
         Me._socket = socket
+        Me._socket.SendTimeout = 5000   ' 送信タイムアウト 5秒
 
         マスタデータ = New マスタデータ
 
@@ -162,11 +163,32 @@ Public Class TCPClient
         '文字列をByte型配列に変換
         Dim sendBytes As Byte() = _encording.GetBytes((str + vbCrLf))
 
-        SyncLock Me
-            'データを送信する
-            Me._socket.Send(sendBytes)
+        ' 送信リトライ処理（最大2回、各5秒タイムアウト）
+        Dim retryCount As Integer = 0
+        Dim sendSuccess As Boolean = False
 
-        End SyncLock
+        Do While retryCount < 2 AndAlso Not sendSuccess
+            Try
+                SyncLock Me
+                    'データを送信する
+                    Me._socket.Send(sendBytes)
+                End SyncLock
+                sendSuccess = True
+
+            Catch ex As SocketException
+                retryCount += 1
+                If retryCount < 2 Then
+                    LOG.LogAdd("Send失敗（1回目）リトライします: " & Me.端末名 & " / " & ex.Message, 1)
+                Else
+                    LOG.LogAdd("Send失敗（2回目）送信を諦めます: " & Me.端末名 & " / " & ex.Message, 1)
+                End If
+
+            Catch ex As Exception
+                LOG.LogAdd("Send失敗（予期しないエラー）送信を諦めます: " & Me.端末名 & " / " & ex.Message, 1)
+                Exit Do
+
+            End Try
+        End While
 
         '送信データの内容を登録する
         If str.Split(",")(1) = "ANSHEAT" Then
