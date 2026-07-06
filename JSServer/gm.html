@@ -1,0 +1,196 @@
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>GMフリーズ修正レポート</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.7; background: #ffffff; color: #1f2328; padding: 32px 16px; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .meta { color: #57606a; font-size: 13px; margin-bottom: 28px; }
+  h2 { font-size: 15px; font-weight: 600; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; margin-top: 28px; margin-bottom: 12px; }
+  h3 { font-size: 14px; font-weight: 600; margin-top: 18px; margin-bottom: 6px; color: #1f2328; }
+
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-left: 6px; }
+  .badge-bug  { background: #fee2e2; color: #b91c1c; }
+  .badge-fix  { background: #dcfce7; color: #15803d; }
+  .badge-info { background: #dbeafe; color: #1d4ed8; }
+
+  .box { border-radius: 5px; padding: 10px 14px; margin: 8px 0; font-size: 13px; }
+  .box-warn { background: #fff5f5; border: 1px solid #fecaca; color: #991b1b; }
+  .box-ok   { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+  .box-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+  .box-title { font-weight: 700; margin-bottom: 4px; }
+
+  pre { background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 5px; padding: 12px 14px; font-size: 12px; line-height: 1.6; overflow-x: auto; font-family: "Consolas", "Courier New", monospace; margin: 6px 0; }
+  .del { color: #b91c1c; background: #fff0f0; display: block; }
+  .add { color: #166534; background: #f0fff4; display: block; }
+  .ctx { color: #57606a; display: block; }
+  .cmt { color: #6e7781; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  th { background: #f7f8fa; border: 1px solid #e5e7eb; padding: 7px 10px; text-align: left; font-weight: 600; }
+  td { border: 1px solid #e5e7eb; padding: 7px 10px; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  .commit { background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 5px; padding: 8px 14px; font-size: 13px; margin-top: 8px; }
+  .commit code { font-family: "Consolas", monospace; font-size: 12px; background: #eaeef2; padding: 1px 5px; border-radius: 3px; }
+
+  footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 11px; color: #57606a; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>GMフリーズ修正レポート</h1>
+  <p class="meta">対象ファイル: F_GM.vb　／　コミット: d40fd2c　／　ブランチ: master</p>
+
+  
+  <h2>1. 不具合概要</h2>
+
+  <div class="box box-warn">
+    <div class="box-title">症状</div>
+    全ジャッジがSENDを完了してGM画面の全ジャッジセルが水色になった後、画面がフリーズし、
+    F501の採点集計が更新されず、関連端末へのデータ送信も行われなかった。
+  </div>
+
+  <h3>発生条件</h3>
+  <table>
+    <tr><th>条件</th><th>内容</th></tr>
+    <tr><td>電文種別</td><td>SNDRESLT_V2_J（ジャッジ端末からの採点結果SEND）</td></tr>
+    <tr><td>必須状態</td><td>Timer1（競技タイマー）が動作中（TimerStatus = "P" / "D" / "J"）</td></tr>
+    <tr><td>発生タイミング</td><td>最後のジャッジのSEND受信と Timer1_Tick（1秒周期）が同時に重なった瞬間</td></tr>
+    <tr><td>頻度</td><td>ごくまれに（タイミング依存のレースコンディション）</td></tr>
+  </table>
+
+  
+  <h2>2. 根本原因</h2>
+
+  <h3>UIスレッド上からの二重 Invoke によるデッドロック</h3>
+
+  <p style="font-size:13px;color:#57606a;margin-bottom:8px">
+    SNDRESLT_V2_J 受信時、非同期スレッドが <code>Me.Invoke(Sub()...J_Send色付け()...End Sub)</code> でUIスレッドに処理を委譲する。
+    同時に Timer1_Tick が <code>Me.Invoke(TimerDelegate,...)</code> を投入してUIスレッドの完了を待っている。
+    この状態で全SEND確定後に <code>Stopタイマー()</code> が呼ばれると、内部でさらに <code>Me.Invoke(TimerDelegate,...)</code> を実行し、
+    UIスレッドがUIスレッド自身の空きを待つデッドロックが発生した。
+  </p>
+
+  <pre><span class="cmt">【デッドロック発生の構造】</span>
+<span class="ctx">
+[Timer1_Tick スレッド]
+  Me.Invoke(TimerDelegate, ...)        ← UIスレッドに Invoke 投入・完了待ち中
+
+[非同期受信スレッド]（最後のSENDを受信）
+  Me.Invoke(Sub()                      ← UIスレッドの完了待ちでブロック
+    J_Send色付け()
+      全SENDFLAG = True
+        Stopタイマー()
+          Me.Invoke(TimerDelegate)     ← UIスレッドの空きを待つ → 永久ブロック
+  End Sub)
+
+[UIスレッド]
+  Timer1_Tick の TimerDelegate を実行中
+  → 終わったら非同期受信の Sub を実行したいが
+     その Sub の中からさらに Invoke が来るのを待っている
+  → 完全にデッドロック
+</span></pre>
+
+  
+  <h2>3. 修正内容</h2>
+
+  
+  <h3>修正① Stopタイマー() <span class="badge badge-fix">案A</span></h3>
+  <p style="font-size:13px;color:#57606a;margin-bottom:6px">
+    F_GM.vb 行 2502〜2526　／　<code>InvokeRequired</code> による分岐を追加。
+    非同期スレッドから呼ばれた場合のみ Invoke を実行し、UIスレッド上では直接 <code>Timer更新()</code> を呼ぶ。
+  </p>
+  <pre><span class="ctx"> Private Sub Stopタイマー()</span>
+<span class="del">-    Me.Invoke(TimerDelegate, New Object() {"  00:00", SystemColors.Control})</span>
+<span class="add">+    ' 非同期スレッドから呼ばれた場合のみ Invoke する（UIスレッド上からの呼び出しだと二重Invokeでデッドロックになるため）</span>
+<span class="add">+    If Me.InvokeRequired Then</span>
+<span class="add">+        Me.Invoke(New Action(AddressOf Stopタイマー))</span>
+<span class="add">+        Return</span>
+<span class="add">+    End If</span>
+<span class="add">+    Timer更新("  00:00", SystemColors.Control)</span>
+<span class="ctx"> </span>
+<span class="ctx">     TimerStatus = "N"</span>
+<span class="ctx">     Send_TimStart電文("N", "")</span>
+<span class="ctx">     SEND_JK_TIMER("N", "")</span>
+<span class="ctx">     If Movie_Status = "ON" Then</span>
+<span class="ctx">         SEND_JK_KANS_MOVIE_STOP()</span>
+<span class="ctx">         Movie_Status = "OFF"</span>
+<span class="ctx">     End If</span>
+<span class="ctx"> End Sub</span></pre>
+
+  
+  <h3>修正② 更新タイマーStart() <span class="badge badge-fix">案A</span></h3>
+  <p style="font-size:13px;color:#57606a;margin-bottom:6px">
+    F_GM.vb 行 1203〜1212　／　同様に <code>InvokeRequired</code> による分岐を追加。
+    UIスレッド上では直接 <code>Timer2Start()</code> を呼ぶ。
+  </p>
+  <pre><span class="ctx"> Private Sub 更新タイマーStart()</span>
+<span class="ctx">     更新タイマー実施中FLAG = True</span>
+<span class="del">-    Me.Invoke(Timer2_Start_Delegate, New Object() {})</span>
+<span class="add">+    ' 非同期スレッドから呼ばれた場合のみ Invoke する（UIスレッド上からの呼び出しだと二重Invokeでデッドロックになるため）</span>
+<span class="add">+    If Me.InvokeRequired Then</span>
+<span class="add">+        Me.Invoke(Timer2_Start_Delegate, New Object() {})</span>
+<span class="add">+    Else</span>
+<span class="add">+        Timer2Start()</span>
+<span class="add">+    End If</span>
+<span class="ctx"> End Sub</span></pre>
+
+  
+  <h3>修正③ Thread.Sleep(1000) の削除 <span class="badge badge-fix">案C</span></h3>
+  <p style="font-size:13px;color:#57606a;margin-bottom:6px">
+    F_GM.vb 行 1156　／　全SEND確定後のUIスレッド上での不必要な1秒待機を削除。
+  </p>
+  <pre><span class="del">-    System.Threading.Thread.Sleep(1000)</span>
+<span class="add">+    'System.Threading.Thread.Sleep(1000)  ' UIスレッドを占有するため削除</span></pre>
+
+  
+  <h2>4. 既存動作への影響</h2>
+  <table>
+    <tr><th>呼び出し経路</th><th>修正前</th><th>修正後</th></tr>
+    <tr>
+      <td>REQTIMSTART（非同期スレッド）から Stopタイマー()</td>
+      <td>InvokeRequired=True → Invoke 実行</td>
+      <td>同じ（変化なし）</td>
+    </tr>
+    <tr>
+      <td>全SEND検知（UIスレッド上）から Stopタイマー()</td>
+      <td>二重 Invoke → <strong>デッドロック</strong></td>
+      <td>InvokeRequired=False → 直接呼出し（<strong>修正済み</strong>）</td>
+    </tr>
+    <tr>
+      <td>タイマーボタン押下（UIスレッド）から Stopタイマー()</td>
+      <td>二重 Invoke の可能性</td>
+      <td>直接呼出し（安全）</td>
+    </tr>
+    <tr>
+      <td>REQTIMSTART（非同期スレッド）から 更新タイマーStart()</td>
+      <td>InvokeRequired=True → Invoke 実行</td>
+      <td>同じ（変化なし）</td>
+    </tr>
+    <tr>
+      <td>全SEND検知（UIスレッド上）から 更新タイマーStart()</td>
+      <td>二重 Invoke → <strong>デッドロック</strong></td>
+      <td>InvokeRequired=False → Timer2Start() 直接呼出し（<strong>修正済み</strong>）</td>
+    </tr>
+  </table>
+
+  
+  <h2>5. Gitコミット情報</h2>
+  <div class="commit">
+    <table style="border:none;font-size:13px">
+      <tr><td style="border:none;padding:2px 10px 2px 0;font-weight:600;white-space:nowrap">バックアップコミット</td><td style="border:none;padding:2px 0"><code>c95e3d0</code> backup: before fix deadlock in Stopタイマー and 更新タイマーStart</td></tr>
+      <tr><td style="border:none;padding:2px 10px 2px 0;font-weight:600;white-space:nowrap">修正コミット</td><td style="border:none;padding:2px 0"><code>d40fd2c</code> fix: UIスレッド上からのMe.Invoke二重呼び出しによるデッドロック修正 (Stopタイマー/更新タイマーStart) および Thread.Sleep削除</td></tr>
+      <tr><td style="border:none;padding:2px 10px 2px 0;font-weight:600">ブランチ</td><td style="border:none;padding:2px 0">master</td></tr>
+      <tr><td style="border:none;padding:2px 10px 2px 0;font-weight:600">変更ファイル</td><td style="border:none;padding:2px 0">F_GM.vb（+14行 / -3行）</td></tr>
+    </table>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>
