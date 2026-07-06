@@ -1153,7 +1153,7 @@ Public Class F_GM
             '受信したイベントをMainに送る
             RaiseEvent 全ジャッジ送信済みイベント(Me, New EventArgs)
 
-            System.Threading.Thread.Sleep(1000)
+            'System.Threading.Thread.Sleep(1000)  ' UIスレッドを占有するため削除
 
             'End If
 
@@ -1203,7 +1203,12 @@ Public Class F_GM
     Private Sub 更新タイマーStart()
         更新タイマー実施中FLAG = True
 
-        Me.Invoke(Timer2_Start_Delegate, New Object() {})
+        ' 非同期スレッドから呼ばれた場合のみ Invoke する（UIスレッド上からの呼び出しだと二重Invokeでデッドロックになるため）
+        If Me.InvokeRequired Then
+            Me.Invoke(Timer2_Start_Delegate, New Object() {})
+        Else
+            Timer2Start()
+        End If
     End Sub
 
     Private Sub 更新タイマーStop()
@@ -2496,7 +2501,13 @@ Public Class F_GM
     'タイマーのストップ
     Private Sub Stopタイマー()
 
-        Me.Invoke(TimerDelegate, New Object() {"  00:00", SystemColors.Control})
+        ' 非同期スレッドから呼ばれた場合のみ Invoke する（UIスレッド上からの呼び出しだと二重Invokeでデッドロックになるため）
+        If Me.InvokeRequired Then
+            Me.Invoke(New Action(AddressOf Stopタイマー))
+            Return
+        End If
+
+        Timer更新("  00:00", SystemColors.Control)
         'Timer1.Enabled = False
 
         TimerStatus = "N"
