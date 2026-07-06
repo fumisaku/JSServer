@@ -1,0 +1,244 @@
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>GM: SEND_RESULT受信後の処理フロー</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 14px; line-height: 1.6; background: #ffffff; color: #1f2328; padding: 32px 16px; }
+  .container { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #1f2328; }
+  .subtitle { color: #57606a; font-size: 13px; margin-bottom: 28px; }
+  h2 { font-size: 15px; font-weight: 600; color: #1f2328; margin-top: 28px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; }
+
+  /* Flow steps */
+  .flow { position: relative; padding-left: 28px; }
+  .flow::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: #e5e7eb; }
+  .step { position: relative; margin-bottom: 6px; }
+  .step-inner { background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 5px; padding: 10px 14px; position: relative; }
+  .step-inner::before { content: ''; position: absolute; left: -22px; top: 14px; width: 10px; height: 10px; border-radius: 50%; background: #3b82d4; border: 2px solid #fff; box-shadow: 0 0 0 2px #3b82d4; }
+  .step-arrow { text-align: center; color: #57606a; font-size: 16px; margin: 2px 0; }
+  .step-no { display: inline-block; font-size: 11px; font-weight: 700; color: #3b82d4; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 3px; padding: 0 6px; margin-right: 6px; }
+  .step-title { font-weight: 600; display: inline; }
+  .step-body { margin-top: 5px; color: #57606a; font-size: 13px; }
+  .step-file { font-size: 11px; color: #7c5cd8; background: #f5f0ff; border: 1px solid #ddd6fe; border-radius: 3px; padding: 0 6px; margin-left: 8px; }
+
+  .step-inner.highlight { border-color: #fbbf24; background: #fffbeb; }
+  .step-inner.highlight .step-no { color: #d97706; background: #fef3c7; border-color: #fde68a; }
+  .step-inner.highlight::before { background: #f59e0b; box-shadow: 0 0 0 2px #f59e0b; }
+  .step-inner.warn { border-color: #f87171; background: #fff5f5; }
+  .step-inner.warn .step-no { color: #dc2626; background: #fee2e2; border-color: #fecaca; }
+  .step-inner.warn::before { background: #ef4444; box-shadow: 0 0 0 2px #ef4444; }
+
+  /* Sub-flow indent */
+  .sub { margin-top: 6px; padding-left: 16px; border-left: 2px solid #e5e7eb; }
+  .sub-item { font-size: 13px; color: #1f2328; margin-bottom: 3px; padding-left: 4px; }
+  .sub-item::before { content: '→ '; color: #57606a; }
+
+  /* Thread badge */
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 10px; margin-left: 6px; }
+  .badge-async { background: #dbeafe; color: #1d4ed8; }
+  .badge-ui { background: #dcfce7; color: #15803d; }
+  .badge-invoke { background: #fef3c7; color: #b45309; }
+
+  /* Note box */
+  .note { background: #fff5f5; border: 1px solid #fecaca; border-radius: 5px; padding: 10px 14px; margin-top: 10px; font-size: 13px; color: #991b1b; }
+  .note-title { font-weight: 700; margin-bottom: 4px; }
+
+  /* Summary table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  th { background: #f7f8fa; border: 1px solid #e5e7eb; padding: 7px 10px; text-align: left; font-weight: 600; }
+  td { border: 1px solid #e5e7eb; padding: 7px 10px; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 11px; color: #57606a; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>GM: SEND_RESULT電文受信後の処理フロー</h1>
+  <p class="subtitle">クライアントから SNDRESLT 系電文を受信してから、全ジャッジSEND検知・F501採点集計更新までの流れ</p>
+
+  
+  <h2>① 電文受信 〜 TCPClient/TCPServer 層</h2>
+  <div class="flow">
+    <div class="step">
+      <div class="step-inner">
+        <span class="step-no">1</span><span class="step-title">ジャッジ端末が SNDRESLT 系電文を送信</span>
+        <span class="badge badge-async">非同期受信スレッド</span>
+        <div class="step-body">
+          電文種別は採点方式に応じて複数種あり。<br />
+          <code>SNDRESLT</code> / <code>SNDRESLT_J</code> / <code>SNDRESLT_V2_J</code> / <code>SNDRESLT_BR2_J</code>
+        </div>
+      </div>
+    </div>
+    <div class="step-arrow">↓</div>
+    <div class="step">
+      <div class="step-inner">
+        <span class="step-no">2</span><span class="step-title">TCPClient.OnReceivedData() が電文をパース</span>
+        <span class="step-file">TCPClient.vb:360〜</span>
+        <div class="step-body">
+          ソケットの非同期受信コールバックから呼ばれる。<br />
+          <code>端末名 / 区分番号 / ラウンド番号 / ジャッジ記号</code> をプロパティにセット。<br />
+          採点データをファイルに書き込み後、<code>ReceivedData</code> イベントを発火。
+        </div>
+      </div>
+    </div>
+    <div class="step-arrow">↓</div>
+    <div class="step">
+      <div class="step-inner">
+        <span class="step-no">3</span><span class="step-title">TCPServer.client_ReceivedData() がイベントを中継</span>
+        <span class="step-file">TCPServer.vb:87</span>
+        <div class="step-body">
+          TCPServer が保持する全クライアントからのイベントを集約し、<code>TCPServer.ReceivedData</code> イベントとして再発火。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <h2>② F_GM: server_ReceivedData() での振り分け</h2>
+  <div class="flow">
+    <div class="step">
+      <div class="step-inner">
+        <span class="step-no">4</span><span class="step-title">server_ReceivedData() で電文種別を Select Case 分岐</span>
+        <span class="step-file">F_GM.vb:1352〜</span>
+        <span class="badge badge-async">非同期スレッド</span>
+        <div class="step-body">
+          SNDRESLT 系ケースで <code>Add_Client(e.Client)</code> を呼び出してクライアントリストを更新。
+        </div>
+      </div>
+    </div>
+    <div class="step-arrow">↓</div>
+    <div class="step">
+      <div class="step-inner highlight">
+        <span class="step-no">5</span><span class="step-title">Me.Invoke() で UIスレッドに処理を委譲</span>
+        <span class="badge badge-invoke">Invoke (UIスレッドへ切替)</span>
+        <span class="step-file">F_GM.vb:1433〜</span>
+        <div class="step-body">
+          ここから先は UIスレッド上で実行される。<br />
+          <div class="sub">
+            <div class="sub-item">LOG.LogAdd() でログ記録</div>
+            <div class="sub-item">SyncLock lockObj で排他制御</div>
+            <div class="sub-item"><strong>J_LOGIN色付け()</strong> — DGVのジャッジ種目・ヒートを更新</div>
+            <div class="sub-item"><strong>J_Send色付け(現在種目順, 現在ヒート番号)</strong> — 全SEND判定まで実施</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <h2>③ J_Send色付け() 内部での「全SEND判定」</h2>
+  <div class="flow">
+    <div class="step">
+      <div class="step-inner">
+        <span class="step-no">6</span><span class="step-title">DGV上のジャッジ一覧を走査し、採点ファイルをすべて読み込む</span>
+        <span class="step-file">F_GM.vb:729〜</span>
+        <div class="step-body">
+          採点方式（チェック法 / BJPR / PDJ / BJS2 等）に応じて分岐。<br />
+          各ジャッジの採点ファイルをディスクから読み込み、<code>SEND_FLAG</code> を確認。<br />
+          1件でも未SENDがあれば <code>全SENDFLAG = False</code>。
+        </div>
+      </div>
+    </div>
+    <div class="step-arrow">↓</div>
+    <div class="step">
+      <div class="step-inner highlight">
+        <span class="step-no">7</span><span class="step-title">全SENDFLAG = True の場合 → 全SEND処理ブロック実行</span>
+        <span class="step-file">F_GM.vb:1105〜1179</span>
+        <div class="step-body">
+          <div class="sub">
+            <div class="sub-item">進行管理ファイルを読み込み (<code>U_進行管理.FileRead()</code>)</div>
+            <div class="sub-item">ステータスが「全審判送信済み」でなければ書き込み（<code>ステータス = "全審判送信済み"</code>）</div>
+            <div class="sub-item">Stopタイマー() — 既存タイマー停止</div>
+            <div class="sub-item"><strong>更新タイマーStart()</strong> — Timer2 を開始（BJS2系は0.1秒、それ以外は5秒）</div>
+            <div class="sub-item"><strong>RaiseEvent 全ジャッジ送信済みイベント</strong> — Form1へ通知</div>
+            <div class="sub-item">Thread.Sleep(1000) — 1秒待機</div>
+            <div class="sub-item">採点方式が PDJ/VAL → <code>SEND_JK_DANS_RESULT()</code></div>
+            <div class="sub-item">それ以外 → <code>SEND_JK_MU_Progress()</code> + <code>SEND_JK_KANS_RESULT_J()</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <h2>④ 全ジャッジ送信済みイベント → Form1 → F501 更新</h2>
+  <div class="flow">
+    <div class="step">
+      <div class="step-inner">
+        <span class="step-no">8</span><span class="step-title">Form1.全ジャッジ送信済みイベント() が受信</span>
+        <span class="step-file">Form1.vb:604〜</span>
+        <span class="badge badge-ui">UIスレッド</span>
+        <div class="step-body">
+          <code>F200.F501_更新実行()</code> を呼び出す。
+        </div>
+      </div>
+    </div>
+    <div class="step-arrow">↓</div>
+    <div class="step">
+      <div class="step-inner">
+        <span class="step-no">9</span><span class="step-title">F200.F501_更新実行() → F501.更新()</span>
+        <span class="step-file">F200_採点進行確認.vb:341〜</span>
+        <div class="step-body">
+          <code>Me.Invoke(F501_更新Delegate実行)</code> → <code>F501_更新()</code> → <code>F501_採点詳細.更新()</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <h2>⑤ Timer2 Tick → 次ヒート処理</h2>
+  <div class="flow">
+    <div class="step">
+      <div class="step-inner">
+        <span class="step-no">10</span><span class="step-title">Timer2_Tick() が発火（5秒 or 0.1秒後）</span>
+        <span class="step-file">F_GM.vb:1250〜</span>
+        <span class="badge badge-ui">UIスレッド</span>
+        <div class="step-body">
+          <code>次ヒート()</code> を直接呼び出し、その後 Timer2 を停止。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <h2>処理フロー 概要表</h2>
+  <table>
+    <tr>
+      <th>#</th><th>処理</th><th>スレッド</th><th>ファイル</th>
+    </tr>
+    <tr><td>1</td><td>ジャッジ端末がSNDRESLT電文を送信</td><td>—</td><td>クライアント側</td></tr>
+    <tr><td>2</td><td>TCPClient.OnReceivedData() が受信・パース・採点ファイル書込み</td><td>非同期</td><td>TCPClient.vb</td></tr>
+    <tr><td>3</td><td>TCPServer.ReceivedData イベント中継</td><td>非同期</td><td>TCPServer.vb</td></tr>
+    <tr><td>4</td><td>F_GM.server_ReceivedData() でAdd_Client()</td><td>非同期</td><td>F_GM.vb:1352</td></tr>
+    <tr><td>5</td><td>Me.Invoke() → UIスレッドへ切替</td><td>→UIスレッド</td><td>F_GM.vb:1433</td></tr>
+    <tr><td>6</td><td>J_LOGIN色付け() / J_Send色付け() 実行（全ファイル読込）</td><td>UIスレッド</td><td>F_GM.vb:729</td></tr>
+    <tr><td>7</td><td>全SENDFLAG=True → 進行管理書込 / タイマー起動</td><td>UIスレッド</td><td>F_GM.vb:1105</td></tr>
+    <tr><td>8</td><td>RaiseEvent 全ジャッジ送信済みイベント → Form1 が受信</td><td>UIスレッド</td><td>F_GM.vb:1154 / Form1.vb:604</td></tr>
+    <tr><td>9</td><td>Thread.Sleep(1000) — 1秒停止</td><td>UIスレッド</td><td>F_GM.vb:1156</td></tr>
+    <tr><td>10</td><td>SEND_JK_MU_Progress / SEND_JK_KANS_RESULT_J で関連端末へ送信</td><td>UIスレッド</td><td>F_GM.vb:1170〜1173</td></tr>
+    <tr><td>11</td><td>F200.F501_更新実行() → F501.更新()</td><td>UIスレッド</td><td>F200.vb:341</td></tr>
+    <tr><td>12</td><td>Timer2_Tick → 次ヒート()</td><td>UIスレッド</td><td>F_GM.vb:1250</td></tr>
+  </table>
+
+  
+  <h2>フリーズ発生の疑い箇所</h2>
+  <div class="note">
+    <div class="note-title">⚠ 注目ポイント（調査前の仮説）</div>
+    <strong>【手順7〜10はすべて UIスレッド上で連続実行される】</strong><br />
+    全SEND検知後、UIスレッドが以下を連続して担当するため、いずれかで詰まるとUIがフリーズしたように見える。
+    <ul style="margin-top:8px;padding-left:20px;font-size:13px;line-height:1.8">
+      <li><strong>進行管理ファイル読み書き</strong> (FileRead / 登録) — I/Oブロック</li>
+      <li><strong>Thread.Sleep(1000)</strong> — UIスレッドを1秒間完全に占有</li>
+      <li><strong>SEND_JK_MU_Progress / SEND_JK_KANS_RESULT_J</strong> — 関連Client_list 全端末へのTCP送信ループ（接続切れ端末があると長時間ブロックの可能性）</li>
+      <li><strong>更新タイマーStart() 内の Me.Invoke(Timer2_Start_Delegate)</strong> — 既にUIスレッド上にいるため Invoke によるデッドロックリスク</li>
+      <li><strong>RaiseEvent 後に Form1 側で F501_更新実行() → さらに Invoke</strong> — 二重 Invoke によるデッドロックリスク</li>
+    </ul>
+  </div>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>
