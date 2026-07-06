@@ -1213,7 +1213,13 @@ Public Class F_GM
 
     Private Sub 更新タイマーStop()
         更新タイマー実施中FLAG = False
-        Me.Invoke(Timer2_Stop_Delegate, New Object() {})
+
+        ' 非同期スレッドから呼ばれた場合のみ Invoke する（UIスレッド上からの呼び出しだと二重Invokeでデッドロックになるため）
+        If Me.InvokeRequired Then
+            Me.Invoke(Timer2_Stop_Delegate, New Object() {})
+        Else
+            Timer2Stop()
+        End If
     End Sub
 
     ' 'デリゲート宣言
@@ -1258,8 +1264,8 @@ Public Class F_GM
         次ヒート()
         'Me.Invoke(次ヒート_Delegate, New Object() {})
 
-        Me.Invoke(Timer2_Stop_Delegate, New Object() {})
-
+        ' Timer2_Tick は UIスレッドで発火するため、Invoke ではなく直接呼び出す
+        Timer2Stop()
 
         更新タイマー実施中FLAG = False
 
