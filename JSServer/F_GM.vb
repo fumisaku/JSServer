@@ -33,7 +33,8 @@ Public Class F_GM
     Public Client_list(100) As TCPClient
     Private 関連Client_list(100) As TCPClient
 
-    Private LOG As LOG_C
+    ' LOG は Set_LOG() が呼ばれるまで空インスタンス（出力なし）を使用する
+    Private LOG As LOG_C = New LOG_C
 
     'コンストラクタ
     Private Sub F_GM_Load(sender As Object, e As EventArgs) Handles MyBase.Load

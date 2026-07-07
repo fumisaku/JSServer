@@ -49,7 +49,7 @@ Partial Class Form1
         'Button1
         '
         Me.Button1.Location = New System.Drawing.Point(664, 342)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(2)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(81, 28)
         Me.Button1.TabIndex = 0
@@ -60,7 +60,7 @@ Partial Class Form1
         'Button3
         '
         Me.Button3.Location = New System.Drawing.Point(656, 260)
-        Me.Button3.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button3.Margin = New System.Windows.Forms.Padding(2)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(80, 44)
         Me.Button3.TabIndex = 2
@@ -72,7 +72,7 @@ Partial Class Form1
         '
         Me.Button4.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button4.Location = New System.Drawing.Point(219, 164)
-        Me.Button4.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button4.Margin = New System.Windows.Forms.Padding(2)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(144, 42)
         Me.Button4.TabIndex = 3
@@ -83,7 +83,7 @@ Partial Class Form1
         '
         Me.Button5.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button5.Location = New System.Drawing.Point(218, 220)
-        Me.Button5.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button5.Margin = New System.Windows.Forms.Padding(2)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(145, 38)
         Me.Button5.TabIndex = 4
@@ -94,7 +94,7 @@ Partial Class Form1
         '
         Me.Button6.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button6.Location = New System.Drawing.Point(219, 305)
-        Me.Button6.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button6.Margin = New System.Windows.Forms.Padding(2)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(144, 42)
         Me.Button6.TabIndex = 5
@@ -105,7 +105,7 @@ Partial Class Form1
         '
         Me.Button7.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button7.Location = New System.Drawing.Point(219, 110)
-        Me.Button7.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button7.Margin = New System.Windows.Forms.Padding(2)
         Me.Button7.Name = "Button7"
         Me.Button7.Size = New System.Drawing.Size(144, 42)
         Me.Button7.TabIndex = 6
@@ -116,7 +116,7 @@ Partial Class Form1
         '
         Me.Button8.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.Button8.Location = New System.Drawing.Point(219, 367)
-        Me.Button8.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button8.Margin = New System.Windows.Forms.Padding(2)
         Me.Button8.Name = "Button8"
         Me.Button8.Size = New System.Drawing.Size(144, 42)
         Me.Button8.TabIndex = 7
@@ -127,7 +127,7 @@ Partial Class Form1
         '
         Me.PB_進行管理.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.PB_進行管理.Location = New System.Drawing.Point(406, 110)
-        Me.PB_進行管理.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PB_進行管理.Margin = New System.Windows.Forms.Padding(2)
         Me.PB_進行管理.Name = "PB_進行管理"
         Me.PB_進行管理.Size = New System.Drawing.Size(146, 42)
         Me.PB_進行管理.TabIndex = 8
@@ -139,7 +139,7 @@ Partial Class Form1
         Me.PB_StartGM.Font = New System.Drawing.Font("MS UI Gothic", 13.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.PB_StartGM.ForeColor = System.Drawing.Color.RoyalBlue
         Me.PB_StartGM.Location = New System.Drawing.Point(31, 110)
-        Me.PB_StartGM.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PB_StartGM.Margin = New System.Windows.Forms.Padding(2)
         Me.PB_StartGM.Name = "PB_StartGM"
         Me.PB_StartGM.Size = New System.Drawing.Size(129, 54)
         Me.PB_StartGM.TabIndex = 9
@@ -162,7 +162,7 @@ Partial Class Form1
         '
         Me.PB_フォルダ.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.PB_フォルダ.Location = New System.Drawing.Point(31, 54)
-        Me.PB_フォルダ.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PB_フォルダ.Margin = New System.Windows.Forms.Padding(2)
         Me.PB_フォルダ.Name = "PB_フォルダ"
         Me.PB_フォルダ.Size = New System.Drawing.Size(110, 41)
         Me.PB_フォルダ.TabIndex = 11
@@ -197,7 +197,7 @@ Partial Class Form1
         '
         Me.TB_フォルダ.Font = New System.Drawing.Font("MS UI Gothic", 10.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.TB_フォルダ.Location = New System.Drawing.Point(158, 54)
-        Me.TB_フォルダ.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TB_フォルダ.Margin = New System.Windows.Forms.Padding(2)
         Me.TB_フォルダ.Multiline = True
         Me.TB_フォルダ.Name = "TB_フォルダ"
         Me.TB_フォルダ.ReadOnly = True
@@ -208,7 +208,7 @@ Partial Class Form1
         '
         Me.PB_司会進行.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.PB_司会進行.Location = New System.Drawing.Point(411, 342)
-        Me.PB_司会進行.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PB_司会進行.Margin = New System.Windows.Forms.Padding(2)
         Me.PB_司会進行.Name = "PB_司会進行"
         Me.PB_司会進行.Size = New System.Drawing.Size(146, 42)
         Me.PB_司会進行.TabIndex = 16
@@ -220,7 +220,7 @@ Partial Class Form1
         '
         Me.PB_支援システムデータ移行.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.PB_支援システムデータ移行.Location = New System.Drawing.Point(218, 490)
-        Me.PB_支援システムデータ移行.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PB_支援システムデータ移行.Margin = New System.Windows.Forms.Padding(2)
         Me.PB_支援システムデータ移行.Name = "PB_支援システムデータ移行"
         Me.PB_支援システムデータ移行.Size = New System.Drawing.Size(145, 59)
         Me.PB_支援システムデータ移行.TabIndex = 17
@@ -230,7 +230,7 @@ Partial Class Form1
         'Button2
         '
         Me.Button2.Location = New System.Drawing.Point(655, 436)
-        Me.Button2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button2.Margin = New System.Windows.Forms.Padding(2)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(61, 26)
         Me.Button2.TabIndex = 18
@@ -241,7 +241,7 @@ Partial Class Form1
         'Button9
         '
         Me.Button9.Location = New System.Drawing.Point(655, 476)
-        Me.Button9.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button9.Margin = New System.Windows.Forms.Padding(2)
         Me.Button9.Name = "Button9"
         Me.Button9.Size = New System.Drawing.Size(61, 27)
         Me.Button9.TabIndex = 19
@@ -252,7 +252,7 @@ Partial Class Form1
         'PB_移行
         '
         Me.PB_移行.Location = New System.Drawing.Point(411, 490)
-        Me.PB_移行.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PB_移行.Margin = New System.Windows.Forms.Padding(2)
         Me.PB_移行.Name = "PB_移行"
         Me.PB_移行.Size = New System.Drawing.Size(146, 37)
         Me.PB_移行.TabIndex = 20
@@ -279,12 +279,12 @@ Partial Class Form1
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(106, 19)
         Me.Label2.TabIndex = 22
-        Me.Label2.Text = "Ver1.02.40"
+        Me.Label2.Text = "Ver1.02.41"
         '
         'Button10
         '
         Me.Button10.Location = New System.Drawing.Point(661, 199)
-        Me.Button10.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button10.Margin = New System.Windows.Forms.Padding(2)
         Me.Button10.Name = "Button10"
         Me.Button10.Size = New System.Drawing.Size(71, 38)
         Me.Button10.TabIndex = 23
@@ -320,7 +320,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button1)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Form1"
         Me.Text = "Form1"
         Me.ResumeLayout(False)

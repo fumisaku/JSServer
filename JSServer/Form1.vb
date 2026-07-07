@@ -602,9 +602,10 @@
 
         F_GM = New F_GM
 
-        F_GM.Show()
-
+        ' Set_LOG を Show() より前に呼ぶことで、起動時イベント内でも LOG が有効になる
         F_GM.Set_LOG(LOG)
+
+        F_GM.Show()
 
 
 
