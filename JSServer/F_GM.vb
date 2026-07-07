@@ -85,6 +85,10 @@ Public Class F_GM
         Me.DGV_ジャッジ.CurrentCell = Nothing
         Me.DGV_種目.CurrentCell = Nothing
         Me.DGV_ヒート.CurrentCell = Nothing
+
+        ' Set_LOG が Show() より前に呼ばれた場合、TCPServer への LOG 設定が
+        ' スキップされているため、ここで改めてセットする
+        TCPServer.Set_LOG(LOG)
     End Sub
 
     'コンボボックスが選択された時
@@ -1348,7 +1352,12 @@ Public Class F_GM
     Public Sub Set_LOG(_LOG As LOG_C)
 
         LOG = _LOG
-        TCPServer.Set_LOG(LOG)
+
+        ' TCPServer は F_GM_Load で初期化されるため、Set_LOG が先に呼ばれた場合はスキップ
+        ' F_GM_Load 末尾で再度セットする
+        If TCPServer IsNot Nothing Then
+            TCPServer.Set_LOG(LOG)
+        End If
 
     End Sub
 
