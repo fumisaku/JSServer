@@ -8,6 +8,9 @@ Public Class LOG_C
 
     Private ON_OFF_Flag As String
 
+    ' 複数スレッドからの同時書き込みによるファイルロック競合を防ぐ
+    Private Shared lockObj As New Object()
+
     Private LOG_Path As String
     Private LOG_Filename As String
 
@@ -70,18 +73,20 @@ Public Class LOG_C
     Public Sub LogAdd(ByVal cmt As String, ByVal Level As Integer)
         'cmt の内容をLOGとして書き出し
 
-        If ON_OFF_Flag = "ON" Then
+        If ON_OFF_Flag <> "ON" Then Exit Sub
+        If Level > LOG_Level Then Exit Sub
 
-            If Level <= LOG_Level Then
-
+        ' SyncLock で複数スレッドからの同時書き込みを直列化
+        SyncLock lockObj
+            Try
                 Using writer = New StreamWriter(LOG_Filename, True)
-
                     writer.WriteLine(Format(Now, "yyyy/MM/dd") & " " & Format(Now, "HH:mm:ss") & " " & Level & " " & cmt)
-
                 End Using
+            Catch ex As Exception
+                ' ログ書き込み失敗は無視（ログのために他の処理を止めない）
+            End Try
+        End SyncLock
 
-            End If
-        End If
     End Sub
 
     '''
