@@ -158,6 +158,10 @@ Public Class F_GM
     Private Sub 次ヒート()
         '次のヒートに更新する。
 
+        ' 全SEND後処理済みフラグをリセット
+        全SEND処理済FLAG = False
+        LOG.LogAdd("次ヒート: 全SEND処理済FLAGをリセット", 4)
+
         Dim 種目記号リスト() = Nothing
         Dim 採点方式 As String = ""
         Dim SG種別 As String = ""
@@ -275,6 +279,10 @@ Public Class F_GM
 
     Private Sub 指定ヒート()
 
+        ' 全SEND後処理済みフラグをリセット
+        全SEND処理済FLAG = False
+        LOG.LogAdd("指定ヒート: 全SEND処理済FLAGをリセット", 4)
+
         Dim 選択種目行 As Integer
         '現在選択されている行
         For Each c As DataGridViewCell In DGV_種目.SelectedCells
@@ -340,6 +348,10 @@ Public Class F_GM
 
     Private Sub 前ヒート()
         '前のヒートに更新する。
+
+        ' 全SEND後処理済みフラグをリセット
+        全SEND処理済FLAG = False
+        LOG.LogAdd("前ヒート: 全SEND処理済FLAGをリセット", 4)
 
 
         '前のヒート番号（種目番号）を確定する
@@ -1104,6 +1116,14 @@ Public Class F_GM
         '全SENDを確認したら 進行管理ファイルに書き込む
         If 全SENDFLAG = True Then
 
+            LOG.LogAdd("全SEND確定: 種目=" & 対象種目順 & " ヒート=" & 対象ヒート番号 & " 処理済FLAG=" & 全SEND処理済FLAG, 4)
+
+            ' 2人同時SENDによる二重実行を防止
+            If 全SEND処理済FLAG = True Then
+                LOG.LogAdd("全SEND後処理スキップ（処理済）", 4)
+                Exit Sub
+            End If
+            全SEND処理済FLAG = True
 
             マスタデータ.U_進行管理.FileRead()
 
@@ -1151,7 +1171,9 @@ Public Class F_GM
             'End If
 
             '受信したイベントをMainに送る
+            LOG.LogAdd("RaiseEvent 全ジャッジ送信済みイベント 発火", 4)
             RaiseEvent 全ジャッジ送信済みイベント(Me, New EventArgs)
+            LOG.LogAdd("RaiseEvent 全ジャッジ送信済みイベント 完了", 4)
 
             'System.Threading.Thread.Sleep(1000)  ' UIスレッドを占有するため削除
 
@@ -1182,6 +1204,9 @@ Public Class F_GM
 
     '更新タイマー実施中FLAG
     Private 更新タイマー実施中FLAG As Boolean
+
+    ' 全SEND後処理済みフラグ（2人同時SENDによる二重実行を防止）
+    Private 全SEND処理済FLAG As Boolean = False
 
     '受信したイベントをMainに送る
     Public Event 全ジャッジ送信済みイベント(ByVal sender As Object, ByVal e As System.EventArgs)

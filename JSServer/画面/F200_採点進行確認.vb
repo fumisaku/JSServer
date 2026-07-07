@@ -340,7 +340,14 @@
 
     Public Sub F501_更新実行()
 
-        Me.Invoke(F501_更新Delegate実行, New Object() {})
+        Console.WriteLine(System.DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & ":F501_更新実行 開始 InvokeRequired=" & Me.InvokeRequired)
+
+        ' 非同期スレッドから呼ばれた場合のみ Invoke する（UIスレッド上からの呼び出しだと二重Invokeでデッドロックになるため）
+        If Me.InvokeRequired Then
+            Me.Invoke(F501_更新Delegate実行, New Object() {})
+        Else
+            F501_更新()
+        End If
 
     End Sub
 

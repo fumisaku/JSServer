@@ -586,10 +586,19 @@
     Private WithEvents F_GM As F_GM
     Private Sub PB_StartGM_Click(sender As Object, e As EventArgs) Handles PB_StartGM.Click
 
+        ' 設定ファイル(Z_System.csv)の [ログレベル] を読み込む
+        ' 記述がない場合は LogLevel=0（ログ出力なし）
+        Dim システム設定 As New マスタデータ
+        Dim logLevel As Integer = システム設定.Z_システム設定.LogLevel
 
         Dim LOG As LOG_C
         LOG = New LOG_C
-        LOG.CreateFile()
+
+        If logLevel > 0 Then
+            ' ログレベルが設定されている場合のみファイルを作成・出力
+            LOG.CreateFile()
+            LOG.SetLogLevel(logLevel)
+        End If
 
         F_GM = New F_GM
 

@@ -23,6 +23,10 @@ Public Class Z_システム設定
 
     Public Mファイルパス As String
 
+    ' ログレベル（デフォルト0=ログ出力なし、1=ERR、2=WARNING、3=INFO、4=DEBUG）
+    ' Z_System.csv の [ログレベル] セクションで設定。記述がない場合は 0（出力なし）
+    Public LogLevel As Integer = 0
+
 
     Const File頭文字列 = "Z_System"
 
@@ -207,6 +211,18 @@ Public Class Z_システム設定
                                 End If
                             Next j
 
+                        Case "[ログレベル]"
+                            For j = i + 1 To 行数
+                                If Left(stResult(j), 2) <> "//" And Left(stResult(j), 1) <> "[" And stResult(j) <> "" Then
+                                    Dim lv As Integer = 0
+                                    If Integer.TryParse(stResult(j).Trim(), lv) Then
+                                        Me.LogLevel = lv
+                                    End If
+                                    j = 行数
+                                ElseIf Left(stResult(j), 1) = "[" Then
+                                    j = 行数
+                                End If
+                            Next j
 
                     End Select
 
