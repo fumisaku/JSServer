@@ -186,7 +186,7 @@ Public Class F_GM
         J_LOGIN色付け()
 
 
-        J_Send色付け(現在種目順, 現在ヒート番号)
+        J_Send色付け(現在種目順, 現在ヒート番号, False)  ' 色付けのみ
 
 
 
@@ -329,7 +329,7 @@ Public Class F_GM
         J_LOGIN色付け()
 
 
-        J_Send色付け(現在種目順, 現在ヒート番号)
+        J_Send色付け(現在種目順, 現在ヒート番号, False)  ' 色付けのみ
 
 
 
@@ -419,7 +419,7 @@ Public Class F_GM
         J_LOGIN色付け()
 
 
-        J_Send色付け(現在種目順, 現在ヒート番号)
+        J_Send色付け(現在種目順, 現在ヒート番号, False)  ' 色付けのみ
 
 
         '現在種目とヒート番号を更新
@@ -471,7 +471,7 @@ Public Class F_GM
             '審判員リストの作成
             DGV_ジャッジの更新(マスタデータ, 区分番号, ラウンド番号)
 
-            J_Send色付け(現在種目順, 現在ヒート番号)
+            J_Send色付け(現在種目順, 現在ヒート番号, False)  ' 色付けのみ
 
 
         End If
@@ -743,7 +743,9 @@ Public Class F_GM
 
 
     'DGVジャッジ SEND状態の色付け
-    Private Sub J_Send色付け(対象種目順 As Integer, 対象ヒート番号 As Integer)
+    ' 全SEND後処理実行: True=全SEND確定後にタイマー停止・RaiseEvent・関連端末送信を実行（SNDRESLT受信時）
+    '                   False=色付けのみ実施（次ヒート/前ヒート/指定ヒート/DGVクリック時）
+    Private Sub J_Send色付け(対象種目順 As Integer, 対象ヒート番号 As Integer, Optional 全SEND後処理実行 As Boolean = True)
         '
 
         'DGVに表示されているジャッジ記号リストを入手
@@ -1121,7 +1123,12 @@ Public Class F_GM
         '全SENDを確認したら 進行管理ファイルに書き込む
         If 全SENDFLAG = True Then
 
-            LOG.LogAdd("全SEND確定: 種目=" & 対象種目順 & " ヒート=" & 対象ヒート番号 & " 処理済FLAG=" & 全SEND処理済FLAG, 4)
+            LOG.LogAdd("全SEND確定: 種目=" & 対象種目順 & " ヒート=" & 対象ヒート番号 & " 処理済FLAG=" & 全SEND処理済FLAG & " 後処理=" & 全SEND後処理実行, 4)
+
+            ' 色付けのみの呼び出し（次ヒート等）では全SEND後処理を実行しない
+            If 全SEND後処理実行 = False Then
+                Exit Sub
+            End If
 
             ' 2人同時SENDによる二重実行を防止
             If 全SEND処理済FLAG = True Then
@@ -1347,7 +1354,7 @@ Public Class F_GM
 
         'ジャッジ表の更新
         If s + 1 > 0 And h + 1 > 0 Then
-            J_Send色付け(s + 1, h + 1)
+            J_Send色付け(s + 1, h + 1, False)  ' 色付けのみ
         End If
 
     End Sub
