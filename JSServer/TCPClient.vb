@@ -188,7 +188,7 @@ Public Class TCPClient
                 Exit Do
 
             End Try
-        End While
+        Loop
 
         '送信データの内容を登録する
         If str.Split(",")(1) = "ANSHEAT" Then
