@@ -200,7 +200,11 @@
 
         If PCS数 > 0 Then
             If LOGLEVEL >= 4 Then
-                Me.Invoke(LogDelegate, New Object() {"F501更新開始", 4})
+                If Me.InvokeRequired Then
+                    Me.Invoke(LogDelegate, New Object() {"F501更新開始", 4})
+                Else
+                    WriteLog("F501更新開始", 4)
+                End If
             End If
 
         End If
@@ -320,7 +324,11 @@
 
         If PCS数 > 0 Then
             If LOGLEVEL >= 4 Then
-                Me.Invoke(LogDelegate, New Object() {"F501更新開始", 4})
+                If Me.InvokeRequired Then
+                    Me.Invoke(LogDelegate, New Object() {"F501更新開始", 4})
+                Else
+                    WriteLog("F501更新開始", 4)
+                End If
             End If
 
         End If
@@ -2914,7 +2922,11 @@
         'タイマー毎に呼ばれるイベント
 
         If LOGLEVEL >= 4 Then
-            Me.Invoke(LogDelegate, New Object() {"F501_Timer2から更新呼び出し", 4})
+            If Me.InvokeRequired Then
+                Me.Invoke(LogDelegate, New Object() {"F501_Timer2から更新呼び出し", 4})
+            Else
+                WriteLog("F501_Timer2から更新呼び出し", 4)
+            End If
         End If
 
         タブ移動実施()
@@ -3065,7 +3077,11 @@
     Private Sub PB_更新_Click(sender As Object, e As EventArgs) Handles PB_更新.Click
 
         If LOGLEVEL >= 4 Then
-            Me.Invoke(LogDelegate, New Object() {"F501_「更新ボタン」から更新呼び出し", 4})
+            If Me.InvokeRequired Then
+                Me.Invoke(LogDelegate, New Object() {"F501_「更新ボタン」から更新呼び出し", 4})
+            Else
+                WriteLog("F501_「更新ボタン」から更新呼び出し", 4)
+            End If
         End If
 
 
@@ -4640,7 +4656,11 @@
         'タイマー毎に呼ばれるイベント
 
         If LOGLEVEL >= 4 Then
-            Me.Invoke(LogDelegate, New Object() {"F501_Timer１から更新呼び出し", 4})
+            If Me.InvokeRequired Then
+                Me.Invoke(LogDelegate, New Object() {"F501_Timer１から更新呼び出し", 4})
+            Else
+                WriteLog("F501_Timer１から更新呼び出し", 4)
+            End If
         End If
 
 
@@ -4702,7 +4722,11 @@
             Next d
 
             If LOGLEVEL >= 4 Then
-                Me.Invoke(LogDelegate, New Object() {"F501_Cali設定ボタンから更新呼び出し", 4})
+                If Me.InvokeRequired Then
+                    Me.Invoke(LogDelegate, New Object() {"F501_Cali設定ボタンから更新呼び出し", 4})
+                Else
+                    WriteLog("F501_Cali設定ボタンから更新呼び出し", 4)
+                End If
             End If
 
 
@@ -4726,7 +4750,11 @@
             Next d
 
             If LOGLEVEL >= 4 Then
-                Me.Invoke(LogDelegate, New Object() {"F501_Cali設定ボタンから更新呼び出し", 4})
+                If Me.InvokeRequired Then
+                    Me.Invoke(LogDelegate, New Object() {"F501_Cali設定ボタンから更新呼び出し", 4})
+                Else
+                    WriteLog("F501_Cali設定ボタンから更新呼び出し", 4)
+                End If
             End If
 
 
@@ -4997,7 +5025,11 @@
             Next
 
             If LOGLEVEL >= 4 Then
-                Me.Invoke(LogDelegate, New Object() {"F501_TabVisibleChangeから更新呼び出し", 4})
+                If Me.InvokeRequired Then
+                    Me.Invoke(LogDelegate, New Object() {"F501_TabVisibleChangeから更新呼び出し", 4})
+                Else
+                    WriteLog("F501_TabVisibleChangeから更新呼び出し", 4)
+                End If
             End If
 
 
