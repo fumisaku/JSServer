@@ -1503,18 +1503,16 @@ Public Class F_GM
                 'E13_RCV
                 Add_Client(e.Client)
 
-                ' UIスレッドで実行し、例外処理を追加（LogDelegateとの二重Invoke解消）
-                Me.Invoke(Sub()
-                              Try
-                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
-                                  SyncLock lockObj
-                                      J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
-                                      J_Send色付け(現在種目順, 現在ヒート番号)
-                                  End SyncLock
-                              Catch ex As Exception
-                                  LOG.LogAdd("SNDRESLT処理エラー: " & ex.Message, 1)
-                              End Try
-                          End Sub)
+                ' BeginInvoke で非同期投入（TCP受信スレッドをブロックしない）
+                Me.BeginInvoke(Sub()
+                                   Try
+                                       LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
+                                       J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
+                                       J_Send色付け(現在種目順, 現在ヒート番号)
+                                   Catch ex As Exception
+                                       LOG.LogAdd("SNDRESLT処理エラー: " & ex.Message, 1)
+                                   End Try
+                               End Sub)
 
                 'ここでイベントを発生させて、F501を更新したい
 
@@ -1523,18 +1521,16 @@ Public Class F_GM
                 'E13_RCV
                 Add_Client(e.Client)
 
-                ' UIスレッドで実行し、例外処理を追加（LogDelegateとの二重Invoke解消）
-                Me.Invoke(Sub()
-                              Try
-                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
-                                  SyncLock lockObj
-                                      J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
-                                      J_Send色付け(現在種目順, 現在ヒート番号)
-                                  End SyncLock
-                              Catch ex As Exception
-                                  LOG.LogAdd("SNDRESLT_J処理エラー: " & ex.Message, 1)
-                              End Try
-                          End Sub)
+                ' BeginInvoke で非同期投入（TCP受信スレッドをブロックしない）
+                Me.BeginInvoke(Sub()
+                                   Try
+                                       LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
+                                       J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
+                                       J_Send色付け(現在種目順, 現在ヒート番号)
+                                   Catch ex As Exception
+                                       LOG.LogAdd("SNDRESLT_J処理エラー: " & ex.Message, 1)
+                                   End Try
+                               End Sub)
 
                 'ここでイベントを発生させて、F501を更新したい
 
@@ -1542,39 +1538,34 @@ Public Class F_GM
                 'E13_RCV
                 Add_Client(e.Client)
 
-                ' UIスレッドで実行し、例外処理を追加（LogDelegateとの二重Invoke解消）
-                Me.Invoke(Sub()
-                              Try
-                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
-                                  SyncLock lockObj
-                                      J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
-                                      J_Send色付け(現在種目順, 現在ヒート番号)
-                                  End SyncLock
-                              Catch ex As Exception
-                                  LOG.LogAdd("SNDRESLT_V2_J処理エラー: " & ex.Message, 1)
-                              End Try
-                          End Sub)
+                ' BeginInvoke で非同期投入（TCP受信スレッドをブロックしない）
+                Me.BeginInvoke(Sub()
+                                   Try
+                                       LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
+                                       J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
+                                       J_Send色付け(現在種目順, 現在ヒート番号)
+                                   Catch ex As Exception
+                                       LOG.LogAdd("SNDRESLT_V2_J処理エラー: " & ex.Message, 1)
+                                   End Try
+                               End Sub)
 
 
             Case "SNDRESLT_BR2_J"
                 'E13_RCV
                 Add_Client(e.Client)
 
-                ' UIスレッドで実行し、例外処理を追加（LogDelegateとの二重Invoke解消）
-                Me.Invoke(Sub()
-                              Try
-                                  LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
-                                  SyncLock lockObj
-                                      'CheckAllJudgSend_BR2(str.Split(",")(5), str.Split(",")(6))   'GMの現在競技以外でSENDされても、進行を更新するため。
-                                      'TCP Clientで実装する。
-
-                                      J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
-                                      J_Send色付け(現在種目順, 現在ヒート番号)
-                                  End SyncLock
-                              Catch ex As Exception
-                                  LOG.LogAdd("SNDRESLT_BR2_J処理エラー: " & ex.Message, 1)
-                              End Try
-                          End Sub)
+                ' BeginInvoke で非同期投入（TCP受信スレッドをブロックしない）
+                Me.BeginInvoke(Sub()
+                                   Try
+                                       LOG.LogAdd(e.Client.端末名 & "で" & e.Client.ジャッジ記号 & "がSENDしました。", 3)
+                                       'CheckAllJudgSend_BR2(str.Split(",")(5), str.Split(",")(6))   'GMの現在競技以外でSENDされても、進行を更新するため。
+                                       'TCP Clientで実装する。
+                                       J_LOGIN色付け()  'これをしないと、DGV_ジャッジの種目とヒートが更新されない
+                                       J_Send色付け(現在種目順, 現在ヒート番号)
+                                   Catch ex As Exception
+                                       LOG.LogAdd("SNDRESLT_BR2_J処理エラー: " & ex.Message, 1)
+                                   End Try
+                               End Sub)
 
 
 
