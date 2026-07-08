@@ -1193,20 +1193,35 @@ Public Class F_GM
 
 
             ' 関連端末への送信を別スレッドで実行（UIスレッドのブロックを防ぐ）
+            ' 関連Client_listのスナップショットをUIスレッド上で取得してからTask.Runに渡す
+            ' （Task.Runスレッドと関連Client_list への同時アクセスを防ぐ）
             Dim 送信_区分番号 As String = 現在区分番号
             Dim 送信_ラウンド番号 As String = 現在ラウンド番号
             Dim 採点方式 As String = マスタデータ.C_ラウンドマスタ.Get採点方式(送信_区分番号, 送信_ラウンド番号)
+            Dim 送信先リスト As New List(Of TCPClient)
+            For i = 1 To UBound(関連Client_list)
+                If 関連Client_list(i) IsNot Nothing AndAlso Not 関連Client_list(i).IsClosed Then
+                    送信先リスト.Add(関連Client_list(i))
+                End If
+            Next i
 
             Task.Run(Sub()
                          Try
                              If Strings.Left(採点方式, 3) = "PDJ" Or Strings.Left(採点方式, 3) = "VAL" Then
                                  '結果表示端末に結果を送る
-                                 SEND_JK_DANS_RESULT(送信_区分番号, 送信_ラウンド番号)
+                                 For Each cl In 送信先リスト
+                                     cl.SEND_DANS_採点結果(送信_区分番号, 送信_ラウンド番号)
+                                 Next
                              Else
-                                 '関連端末にステータス更新の データ送信を行う MU_Progress
-                                 SEND_JK_MU_Progress(送信_区分番号, 送信_ラウンド番号)
+                                 '関連端末にステータス更新のデータ送信を行う MU_Progress
+                                 For Each cl In 送信先リスト
+                                     cl.SEND_KANS_MU_Progress(送信_区分番号, 送信_ラウンド番号)
+                                 Next
                                  '関連端末に詳細結果のデータ送信を行う
-                                 SEND_JK_KANS_RESULT_J(送信_区分番号, 送信_ラウンド番号)
+                                 For Each cl In 送信先リスト
+                                     cl.SEND_KANS_RESULT_J(送信_区分番号, 送信_ラウンド番号)
+                                     cl.SEND_KANS_MU_Progress(送信_区分番号, 送信_ラウンド番号)
+                                 Next
                              End If
                              LOG.LogAdd("関連端末への送信完了", 4)
                          Catch ex As Exception
