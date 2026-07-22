@@ -115,7 +115,7 @@
 
 
     ''' 採点進行データをCSVに追加する、同じ競技番号の時は更新する
-    ''' 
+    '''
     Public Function 登録(データ As U_進行) As Integer
         '成功した場合は、0   失敗した場合は、1以上を返す
 
@@ -123,109 +123,122 @@
 
         Dim rc As Integer = 0
 
-        Try
-            'ファイルを上書きし、Shift JISで書き込む 
-            Dim sw As New System.IO.StreamWriter(filepath & "\" & filename, False, System.Text.Encoding.Default)
+        ' 回避策2: ファイルロック競合に備え、最大5回リトライする
+        Dim retryCount As Integer = 0
+        Do
+            Try
+                'ファイルを上書きし、Shift JISで書き込む
+                Dim sw As New System.IO.StreamWriter(filepath & "\" & filename, False, System.Text.Encoding.Default)
 
-            'ヘッダーを書き出し
-            sw.WriteLine("競技番号,枝番,種目順,ヒート番号,ステータス,採点終了時刻")
-
-
-            Dim s As Integer
-            Dim 登録済みFLAG As Boolean = False
-
-            For s = 1 To 登録済みレコード数
-
-                Dim 元記号, 新記号
-                Dim 元種目順, 新種目順, 元ヒート番号, 新ヒート番号 As Integer
-
-                '記号が数値型の場合は、数値に変換して大小比較する。
-                If IsNumeric(リスト(s).競技番号 & リスト(s).競技番号枝番) And IsNumeric(データ.競技番号 & データ.競技番号枝番) Then
-
-                    元記号 = CInt(リスト(s).競技番号 & リスト(s).競技番号枝番)
-                    新記号 = CInt(データ.競技番号 & データ.競技番号枝番)
-
-                    元種目順 = リスト(s).種目順
-                    新種目順 = データ.種目順
-
-                    元ヒート番号 = リスト(s).ヒート番号
-                    新ヒート番号 = データ.ヒート番号
-
-                    'そうではない場合は、文字列のままで比較する
-                Else
-                    元記号 = リスト(s).競技番号 & リスト(s).競技番号枝番
-                    新記号 = データ.競技番号 & データ.競技番号枝番
-                End If
+                'ヘッダーを書き出し
+                sw.WriteLine("競技番号,枝番,種目順,ヒート番号,ステータス,採点終了時刻")
 
 
-                If 元記号 = 新記号 And 元種目順 = 新種目順 And 元ヒート番号 = 新ヒート番号 Then
-                    '同じ区分があった場合は、更新
+                Dim s As Integer
+                Dim 登録済みFLAG As Boolean = False
 
-                    '新しいデータを登録する。
+                For s = 1 To 登録済みレコード数
+
+                    Dim 元記号, 新記号
+                    Dim 元種目順, 新種目順, 元ヒート番号, 新ヒート番号 As Integer
+
+                    '記号が数値型の場合は、数値に変換して大小比較する。
+                    If IsNumeric(リスト(s).競技番号 & リスト(s).競技番号枝番) And IsNumeric(データ.競技番号 & データ.競技番号枝番) Then
+
+                        元記号 = CInt(リスト(s).競技番号 & リスト(s).競技番号枝番)
+                        新記号 = CInt(データ.競技番号 & データ.競技番号枝番)
+
+                        元種目順 = リスト(s).種目順
+                        新種目順 = データ.種目順
+
+                        元ヒート番号 = リスト(s).ヒート番号
+                        新ヒート番号 = データ.ヒート番号
+
+                        'そうではない場合は、文字列のままで比較する
+                    Else
+                        元記号 = リスト(s).競技番号 & リスト(s).競技番号枝番
+                        新記号 = データ.競技番号 & データ.競技番号枝番
+                    End If
+
+
+                    If 元記号 = 新記号 And 元種目順 = 新種目順 And 元ヒート番号 = 新ヒート番号 Then
+                        '同じ区分があった場合は、更新
+
+                        '新しいデータを登録する。
+                        sw.WriteLine(カンマ区切り(データ))
+                        登録済みFLAG = True
+
+                    ElseIf 元記号 = 新記号 And 元種目順 < 新種目順 Then
+                        '区分は一緒だけど種目順が小さい場合は単純に登録
+                        sw.WriteLine(カンマ区切り（リスト(s)))
+
+                    ElseIf 元記号 = 新記号 And 元種目順 = 新種目順 And 元ヒート番号 < 新ヒート番号 Then
+                        '区分と種目順は一緒だけどヒート番号が小さい場合は単純に登録
+                        sw.WriteLine(カンマ区切り（リスト(s)))
+
+                    ElseIf 元記号 = 新記号 And 元種目順 > 新種目順 Then
+
+                        If 登録済みFLAG = False Then
+                            '新しいデータを登録する。
+                            sw.WriteLine(カンマ区切り(データ))
+                            登録済みFLAG = True
+                        End If
+
+                        sw.WriteLine(カンマ区切り(リスト(s)))
+
+                    ElseIf 元記号 = 新記号 And 元種目順 = 新種目順 And 元ヒート番号 > 新ヒート番号 Then
+
+                        If 登録済みFLAG = False Then
+                            '新しいデータを登録する。
+                            sw.WriteLine(カンマ区切り(データ))
+                            登録済みFLAG = True
+                        End If
+
+                        sw.WriteLine(カンマ区切り(リスト(s)))
+
+
+
+                    ElseIf 元記号 < 新記号 Then
+                        '区分番号が小さい場合は、単純に登録
+                        sw.WriteLine(カンマ区切り（リスト(s)))
+
+                    ElseIf 元記号 > 新記号 Then
+
+                        If 登録済みFLAG = False Then
+                            '新しいデータを登録する。
+                            sw.WriteLine(カンマ区切り(データ))
+                            登録済みFLAG = True
+                        End If
+
+                        sw.WriteLine(カンマ区切り(リスト(s)))
+
+                    End If
+
+                Next s
+
+                '背番号が一番大きい時は一番最後に追加
+                If 登録済みFLAG = False Then
                     sw.WriteLine(カンマ区切り(データ))
                     登録済みFLAG = True
-
-                ElseIf 元記号 = 新記号 And 元種目順 < 新種目順 Then
-                    '区分は一緒だけど種目順が小さい場合は単純に登録
-                    sw.WriteLine(カンマ区切り（リスト(s)))
-
-                ElseIf 元記号 = 新記号 And 元種目順 = 新種目順 And 元ヒート番号 < 新ヒート番号 Then
-                    '区分と種目順は一緒だけどヒート番号が小さい場合は単純に登録
-                    sw.WriteLine(カンマ区切り（リスト(s)))
-
-                ElseIf 元記号 = 新記号 And 元種目順 > 新種目順 Then
-
-                    If 登録済みFLAG = False Then
-                        '新しいデータを登録する。
-                        sw.WriteLine(カンマ区切り(データ))
-                        登録済みFLAG = True
-                    End If
-
-                    sw.WriteLine(カンマ区切り(リスト(s)))
-
-                ElseIf 元記号 = 新記号 And 元種目順 = 新種目順 And 元ヒート番号 > 新ヒート番号 Then
-
-                    If 登録済みFLAG = False Then
-                        '新しいデータを登録する。
-                        sw.WriteLine(カンマ区切り(データ))
-                        登録済みFLAG = True
-                    End If
-
-                    sw.WriteLine(カンマ区切り(リスト(s)))
-
-
-
-                ElseIf 元記号 < 新記号 Then
-                    '区分番号が小さい場合は、単純に登録
-                    sw.WriteLine(カンマ区切り（リスト(s)))
-
-                ElseIf 元記号 > 新記号 Then
-
-                    If 登録済みFLAG = False Then
-                        '新しいデータを登録する。
-                        sw.WriteLine(カンマ区切り(データ))
-                        登録済みFLAG = True
-                    End If
-
-                    sw.WriteLine(カンマ区切り(リスト(s)))
-
                 End If
 
-            Next s
+                '閉じる
+                sw.Close()
 
-            '背番号が一番大きい時は一番最後に追加
-            If 登録済みFLAG = False Then
-                sw.WriteLine(カンマ区切り(データ))
-                登録済みFLAG = True
-            End If
+                rc = 0
+                Exit Do  ' 書き込み成功 → ループ終了
 
-            '閉じる 
-            sw.Close()
+            Catch ex As System.IO.IOException When retryCount < 5
+                ' 回避策2: 別スレッドのファイルロック競合 → 50ms 待ってリトライ
+                retryCount += 1
+                System.Threading.Thread.Sleep(50)
 
-        Catch ex As Exception
-            rc = 1
+            Catch ex As Exception
+                rc = 1
+                Exit Do
 
-        End Try
+            End Try
+        Loop
 
 
         '登録が終わったら再度読み込み
@@ -260,8 +273,13 @@
         Else
             'ファイルが存在した
 
-            ' StreamReader の新しいインスタンスを生成する
-            Dim cReader As New System.IO.StreamReader(filepath & "\" & filename, System.Text.Encoding.Default)
+            ' 回避策1: FileShare.ReadWrite を指定し、書き込み中でも読み込めるようにする
+            Dim fs As New System.IO.FileStream(
+                filepath & "\" & filename,
+                System.IO.FileMode.Open,
+                System.IO.FileAccess.Read,
+                System.IO.FileShare.ReadWrite)
+            Dim cReader As New System.IO.StreamReader(fs, System.Text.Encoding.Default)
 
             ' 読み込んだ結果をすべて格納するための変数を宣言する
             Dim stResult As String = String.Empty
