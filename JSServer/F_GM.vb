@@ -1198,27 +1198,38 @@ Public Class F_GM
             Dim 送信_区分番号 As String = 現在区分番号
             Dim 送信_ラウンド番号 As String = 現在ラウンド番号
             Dim 採点方式 As String = マスタデータ.C_ラウンドマスタ.Get採点方式(送信_区分番号, 送信_ラウンド番号)
-            Dim 送信先リスト As New List(Of TCPClient)
+            Dim DSP送信先リスト As New List(Of TCPClient)       ' DSP端末のみ
+            Dim その他送信先リスト As New List(Of TCPClient)    ' DSP以外（VS等）
             For i = 1 To UBound(関連Client_list)
                 If 関連Client_list(i) IsNot Nothing AndAlso Not 関連Client_list(i).IsClosed Then
-                    送信先リスト.Add(関連Client_list(i))
+                    If Strings.Left(関連Client_list(i).端末名, 3) = "DSP" Then
+                        DSP送信先リスト.Add(関連Client_list(i))
+                    Else
+                        その他送信先リスト.Add(関連Client_list(i))
+                    End If
                 End If
             Next i
 
             Task.Run(Sub()
                          Try
                              If Strings.Left(採点方式, 3) = "PDJ" Or Strings.Left(採点方式, 3) = "VAL" Then
-                                 '結果表示端末に結果を送る
-                                 For Each cl In 送信先リスト
+                                 '結果表示端末(DSP)に採点結果を送る
+                                 For Each cl In DSP送信先リスト
                                      cl.SEND_DANS_採点結果(送信_区分番号, 送信_ラウンド番号)
+                                 Next
+                                 'DSP以外にはMASTERデータを再送する（ステータス更新のため）
+                                 For Each cl In その他送信先リスト
+                                     cl.SEND_DANS_マスタデータ()
                                  Next
                              Else
                                  '関連端末にステータス更新のデータ送信を行う MU_Progress
-                                 For Each cl In 送信先リスト
+                                 Dim 全送信先リスト As New List(Of TCPClient)(DSP送信先リスト)
+                                 全送信先リスト.AddRange(その他送信先リスト)
+                                 For Each cl In 全送信先リスト
                                      cl.SEND_KANS_MU_Progress(送信_区分番号, 送信_ラウンド番号)
                                  Next
                                  '関連端末に詳細結果のデータ送信を行う
-                                 For Each cl In 送信先リスト
+                                 For Each cl In 全送信先リスト
                                      cl.SEND_KANS_RESULT_J(送信_区分番号, 送信_ラウンド番号)
                                      cl.SEND_KANS_MU_Progress(送信_区分番号, 送信_ラウンド番号)
                                  Next
