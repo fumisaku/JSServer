@@ -1912,9 +1912,11 @@ Public Class F_GM
 
         '該当のTCPClientを探して消す ジャッジ記号でマッチング
         For i = 1 To UBound(関連Client_list)
-            If 関連Client_list(i).端末名 = cl.端末名 Then
-                関連Client_list(i) = Nothing
-                i = UBound(関連Client_list)
+            If 関連Client_list(i) IsNot Nothing Then   ' NullReferenceException対策
+                If 関連Client_list(i).端末名 = cl.端末名 Then
+                    関連Client_list(i) = Nothing
+                    i = UBound(関連Client_list)
+                End If
             End If
         Next i
 
@@ -2004,13 +2006,14 @@ Public Class F_GM
         '1個前のヒートの 種目番号、ヒート番号を取得
 
         'GMで指定した区分、ラウンドを表示しているジャッジの画面を変更
-        For i = 1 To UBound(Client_list)
-            If Client_list(i) IsNot Nothing Then
-                If Client_list(i).区分番号 = 現在区分番号 And
-                   Client_list(i).ラウンド番号 = 現在ラウンド番号 Then
+        Dim snapshot_全JS = DirectCast(Client_list.Clone(), TCPClient())
+        For i = 1 To UBound(snapshot_全JS)
+            Dim cl As TCPClient = snapshot_全JS(i)
+            If cl IsNot Nothing Then
+                If cl.区分番号 = 現在区分番号 And
+                   cl.ラウンド番号 = 現在ラウンド番号 Then
 
-
-                    Client_list(i).SEND_ANSHEAT(Client_list(i).ジャッジ記号, 現在区分番号, 現在ラウンド番号, CStr(選択種目行), 選択ヒート行, "現")
+                    cl.SEND_ANSHEAT(cl.ジャッジ記号, 現在区分番号, 現在ラウンド番号, CStr(選択種目行), 選択ヒート行, "現")
 
                 End If
             End If
@@ -2062,13 +2065,15 @@ Public Class F_GM
         '1個前のヒートの 種目番号、ヒート番号を取得
 
         'GMで指定した区分、ラウンドを表示しているジャッジの画面を変更
-        For i = 1 To UBound(Client_list)
-            If Client_list(i) IsNot Nothing Then
-                If Client_list(i).区分番号 = 現在区分番号 And
-                   Client_list(i).ラウンド番号 = 現在ラウンド番号 And
-                   Client_list(i).ジャッジ記号 = 選択ジャッジ記号 Then
+        Dim snapshot_選択JS = DirectCast(Client_list.Clone(), TCPClient())
+        For i = 1 To UBound(snapshot_選択JS)
+            Dim cl As TCPClient = snapshot_選択JS(i)
+            If cl IsNot Nothing Then
+                If cl.区分番号 = 現在区分番号 And
+                   cl.ラウンド番号 = 現在ラウンド番号 And
+                   cl.ジャッジ記号 = 選択ジャッジ記号 Then
 
-                    Client_list(i).SEND_ANSHEAT(Client_list(i).ジャッジ記号, 現在区分番号, 現在ラウンド番号, CStr(選択種目行), 選択ヒート行, "現")
+                    cl.SEND_ANSHEAT(cl.ジャッジ記号, 現在区分番号, 現在ラウンド番号, CStr(選択種目行), 選択ヒート行, "現")
 
                     '更新
                     'Client_list(i).種目記号 = Me.DGV_種目.Rows(選択種目行 - 1).Cells(0).Value
@@ -2094,13 +2099,15 @@ Public Class F_GM
 
         Dim ヒート数 As Integer = マスタデータ.E_ヒート表マスタ.Getヒート数(種目数)
 
-        For i = 1 To UBound(Client_list)
-            If Client_list(i) IsNot Nothing Then
-                If Client_list(i).区分番号 = 現在区分番号 And
-                   Client_list(i).ラウンド番号 = 現在ラウンド番号 Then
+        Dim snapshot_終了 = DirectCast(Client_list.Clone(), TCPClient())
+        For i = 1 To UBound(snapshot_終了)
+            Dim cl As TCPClient = snapshot_終了(i)
+            If cl IsNot Nothing Then
+                If cl.区分番号 = 現在区分番号 And
+                   cl.ラウンド番号 = 現在ラウンド番号 Then
 
-                    'Client_list(i).SEND_ANSKUBUN()
-                    Client_list(i).SEND_ANSHEAT(Client_list(i).ジャッジ記号, 現在区分番号, 現在ラウンド番号, 種目数, ヒート数, "次")
+                    'cl.SEND_ANSKUBUN()
+                    cl.SEND_ANSHEAT(cl.ジャッジ記号, 現在区分番号, 現在ラウンド番号, 種目数, ヒート数, "次")
 
 
                 End If
@@ -2113,16 +2120,19 @@ Public Class F_GM
     'レフリー端末にNOTICE_BM電文を送る。（誰かがブックマークを押したことの通知
     Private Sub Send_NOTICE_BM電文(区分番号 As String, ラウンド番号 As String, 種目記号 As String, ヒート番号 As Integer)
 
+        ' TCPスレッドから呼ばれるためスナップショットで競合対策
+        Dim snapshot = DirectCast(Client_list.Clone(), TCPClient())
 
         '指定された区分、ラウンドを表示しているジャッジに通知（本当はレフリーだけで良いが。。。）
-        For i = 1 To UBound(Client_list)
-            If Client_list(i) IsNot Nothing Then
-                If Client_list(i).区分番号 = 区分番号 And
-                   Client_list(i).ラウンド番号 = ラウンド番号 And
-                   Client_list(i).種目記号 = 種目記号 And
-                   Client_list(i).ヒート番号 = ヒート番号 Then
+        For i = 1 To UBound(snapshot)
+            Dim cl As TCPClient = snapshot(i)
+            If cl IsNot Nothing Then
+                If cl.区分番号 = 区分番号 And
+                   cl.ラウンド番号 = ラウンド番号 And
+                   cl.種目記号 = 種目記号 And
+                   cl.ヒート番号 = ヒート番号 Then
 
-                    Client_list(i).SEND_NOTICEBM(区分番号, ラウンド番号, 種目記号, ヒート番号)
+                    cl.SEND_NOTICEBM(区分番号, ラウンド番号, 種目記号, ヒート番号)
 
                 End If
             End If
@@ -2681,14 +2691,16 @@ Public Class F_GM
 
     Private Sub Send_TimStart電文(タイマカテゴリ As String, カウントダウン時間 As String)
 
-
+        ' TCPスレッドから呼ばれる可能性があるためスナップショットで競合対策
         'GMで指定した区分、ラウンドを表示しているジャッジの画面を変更
-        For i = 1 To UBound(Client_list)
-            If Client_list(i) IsNot Nothing Then
-                If Client_list(i).区分番号 = 現在区分番号 And
-                   Client_list(i).ラウンド番号 = 現在ラウンド番号 Then
+        Dim snapshot = DirectCast(Client_list.Clone(), TCPClient())
+        For i = 1 To UBound(snapshot)
+            Dim cl As TCPClient = snapshot(i)
+            If cl IsNot Nothing Then
+                If cl.区分番号 = 現在区分番号 And
+                   cl.ラウンド番号 = 現在ラウンド番号 Then
 
-                    Client_list(i).SEND_TIMSTART(現在区分番号, 現在ラウンド番号, 現在種目順, 現在ヒート番号, タイマカテゴリ, カウントダウン時間)
+                    cl.SEND_TIMSTART(現在区分番号, 現在ラウンド番号, 現在種目順, 現在ヒート番号, タイマカテゴリ, カウントダウン時間)
 
                 End If
             End If
@@ -2768,10 +2780,12 @@ Public Class F_GM
     'クライアントにANSKUBUNを送って、ログイン画面をリフレッシュさせる
     Private Sub PB_Refresh_Click(sender As Object, e As EventArgs) Handles PB_Refresh.Click
 
-        For i = 1 To UBound(Client_list)
-            If Client_list(i) IsNot Nothing Then
-                If Client_list(i).ジャッジ記号 = "" Then
-                    Client_list(i).SEND_ANSKUBUN()
+        Dim snapshot = DirectCast(Client_list.Clone(), TCPClient())
+        For i = 1 To UBound(snapshot)
+            Dim cl As TCPClient = snapshot(i)
+            If cl IsNot Nothing Then
+                If cl.ジャッジ記号 = "" Then
+                    cl.SEND_ANSKUBUN()
                 End If
             End If
         Next i
