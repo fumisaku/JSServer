@@ -683,42 +683,52 @@ Public Class F_GM
     'DGVのジャッジ ログイン状態の色付け
     Private Sub J_LOGIN色付け()
 
-        For i = 0 To Me.DGV_ジャッジ.Rows.Count - 1
-            Dim ジャッジ記号 = Me.DGV_ジャッジ.Rows(i).Cells(0).Value
+        Try
+            ' スレッド競合対策: Client_list の参照をローカルにスナップショットしてからループする
+            ' （TCPスレッドが Client_list(l) = Nothing に書き換えても cl は有効なまま）
+            Dim snapshot = DirectCast(Client_list.Clone(), TCPClient())
 
-            Dim FindFlag As Boolean = False
-            For l = 1 To UBound(Client_list)
-                If Client_list(l) IsNot Nothing Then
-                    If ジャッジ記号 = Client_list(l).ジャッジ記号 Then
-                        If 現在ラウンド番号 = Client_list(l).ラウンド番号 And
-                            現在区分番号 = Client_list(l).区分番号 Then
+            For i = 0 To Me.DGV_ジャッジ.Rows.Count - 1
+                Dim ジャッジ記号 = Me.DGV_ジャッジ.Rows(i).Cells(0).Value
 
-                            'ログイン中
-                            'ログインの色付け
-                            Me.DGV_ジャッジ.Rows(i).Cells(0).Style.BackColor = Color.GreenYellow
-                            '種目記号、ヒート番号をセット
-                            Me.DGV_ジャッジ.Rows(i).Cells(2).Value = Client_list(l).種目記号
-                            Me.DGV_ジャッジ.Rows(i).Cells(3).Value = Client_list(l).ヒート番号
+                Dim FindFlag As Boolean = False
+                For l = 1 To UBound(snapshot)
+                    Dim cl As TCPClient = snapshot(l)
+                    If cl IsNot Nothing Then
+                        If ジャッジ記号 = cl.ジャッジ記号 Then
+                            If 現在ラウンド番号 = cl.ラウンド番号 And
+                                現在区分番号 = cl.区分番号 Then
 
-                            FindFlag = True
+                                'ログイン中
+                                'ログインの色付け
+                                Me.DGV_ジャッジ.Rows(i).Cells(0).Style.BackColor = Color.GreenYellow
+                                '種目記号、ヒート番号をセット
+                                Me.DGV_ジャッジ.Rows(i).Cells(2).Value = cl.種目記号
+                                Me.DGV_ジャッジ.Rows(i).Cells(3).Value = cl.ヒート番号
+
+                                FindFlag = True
+                            End If
                         End If
                     End If
+                Next l
+
+                If FindFlag = False Then
+
+                    'ログインの状態の色を消す
+                    Me.DGV_ジャッジ.Rows(i).Cells(0).Style.BackColor = Nothing
+
+                    '種目、ヒートを消す
+                    Me.DGV_ジャッジ.Rows(i).Cells(2).Value = ""
+                    Me.DGV_ジャッジ.Rows(i).Cells(3).Value = ""
+
+
                 End If
-            Next l
 
-            If FindFlag = False Then
+            Next i
 
-                'ログインの状態の色を消す
-                Me.DGV_ジャッジ.Rows(i).Cells(0).Style.BackColor = Nothing
-
-                '種目、ヒートを消す
-                Me.DGV_ジャッジ.Rows(i).Cells(2).Value = ""
-                Me.DGV_ジャッジ.Rows(i).Cells(3).Value = ""
-
-
-            End If
-
-        Next i
+        Catch ex As Exception
+            LOG.LogAdd("J_LOGIN色付けエラー: " & ex.Message, 1)
+        End Try
 
     End Sub
 
@@ -1802,7 +1812,8 @@ Public Class F_GM
 
         Me.Invoke(LogDelegate, New Object() {e.Client.端末名 & "が切断しました。"})
 
-        J_LOGIN色付け()
+        ' TCPスレッドから直接 UI 操作しないよう Invoke 経由で呼ぶ
+        Me.Invoke(Sub() J_LOGIN色付け())
 
     End Sub
 
@@ -1841,13 +1852,15 @@ Public Class F_GM
                 Client_list(i) = cl
                 i = UBound(Client_list)
 
-                J_LOGIN色付け()
+                ' J_LOGIN色付け() は呼び出し元の Me.Invoke/BeginInvoke ブロックに任せる
+                ' （ここで直接呼ぶと TCPスレッドから UI 操作が行われスレッド競合の原因になる）
 
             ElseIf Client_list(i).IsClosed = True Then
                 Client_list(i) = cl
                 i = UBound(Client_list)
 
-                J_LOGIN色付け()
+                ' J_LOGIN色付け() は呼び出し元の Me.Invoke/BeginInvoke ブロックに任せる
+                ' （ここで直接呼ぶと TCPスレッドから UI 操作が行われスレッド競合の原因になる）
 
             ElseIf Client_list(i).端末名 = cl.端末名 Then
                 '上書き
