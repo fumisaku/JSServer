@@ -244,7 +244,7 @@ Partial Class Form1
         '
         Me.PB_進行詳細.Font = New System.Drawing.Font("MS UI Gothic", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.PB_進行詳細.Location = New System.Drawing.Point(548, 293)
-        Me.PB_進行詳細.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PB_進行詳細.Margin = New System.Windows.Forms.Padding(4)
         Me.PB_進行詳細.Name = "PB_進行詳細"
         Me.PB_進行詳細.Size = New System.Drawing.Size(188, 51)
         Me.PB_進行詳細.TabIndex = 21
@@ -260,7 +260,7 @@ Partial Class Form1
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(125, 23)
         Me.Label2.TabIndex = 22
-        Me.Label2.Text = "Ver1.02.43"
+        Me.Label2.Text = "Ver1.02.44"
         '
         'Button10
         '

@@ -1,0 +1,389 @@
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>GMフリーズ問題 修正レポート</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 32px 16px 48px;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  h1 { font-size: 20px; font-weight: 700; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 6px; }
+  .meta { font-size: 12px; color: #57606a; margin-bottom: 28px; }
+
+  h2 { font-size: 15px; font-weight: 700; margin: 28px 0 10px; padding-left: 10px; border-left: 4px solid #3b82d4; }
+  h3 { font-size: 13px; font-weight: 700; margin: 18px 0 6px; color: #1f2328; }
+
+  p { margin-bottom: 8px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 13px; }
+  th { background: #f7f8fa; text-align: left; padding: 7px 10px; border: 1px solid #e5e7eb; font-weight: 600; }
+  td { padding: 6px 10px; border: 1px solid #e5e7eb; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 12px;
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 3px;
+    padding: 1px 5px;
+  }
+  pre {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-x: auto;
+    margin: 8px 0 16px;
+    white-space: pre;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-right: 4px;
+  }
+  .badge-red    { background: #fee2e2; color: #b91c1c; }
+  .badge-green  { background: #dcfce7; color: #15803d; }
+  .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+  .badge-gray   { background: #f7f8fa; color: #57606a; border: 1px solid #e5e7eb; }
+
+  .commit { font-family: "Consolas", monospace; font-size: 11px; color: #57606a; }
+
+  .section-box {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 10px 0 16px;
+  }
+
+  .flow-box {
+    background: #f7f8fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 8px 0 14px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  .tag-fix    { color: #15803d; font-weight: 700; }
+  .tag-cause  { color: #b91c1c; font-weight: 700; }
+  .tag-note   { color: #57606a; }
+
+  hr { border: none; border-top: 1px solid #e5e7eb; margin: 28px 0; }
+
+  footer {
+    margin-top: 48px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 12px;
+    color: #57606a;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>GMフリーズ問題 修正レポート</h1>
+  <div class="meta">対象システム: JS Server (GM アプリケーション)　／　調査・修正日: 2026年7月</div>
+
+  
+  <h2>1. 問題の概要</h2>
+  <p>
+    GMで全ジャッジのSEND済みを検知した後、画面がフリーズする事象が発生した。
+    F501（採点集計画面）が更新されず、関連端末への電文送信も行われない状態が続き、
+    操作不能になることがあった。
+  </p>
+  <p>
+    調査の結果、フリーズの原因は1つではなく <strong>複数のデッドロック構造</strong> が重なっていたことが判明した。
+    今回の対応で確認・修正したものをすべて以下に記録する。
+  </p>
+
+  <hr />
+
+  
+  <h2>2. SEND_RESULT受信後の処理フロー（正常時）</h2>
+  <div class="flow-box">ジャッジ端末
+  │ TCP送信 (SNDRESLT / SNDRESLT_J / SNDRESLT_V2_J / SNDRESLT_BR2_J)
+  ▼
+[TCPServer.vb] client_ReceivedData()
+  │ → OnReceivedData() で ReceivedData イベントを RaiseEvent
+  ▼
+[F_GM.vb] server_ReceivedData()  ← TCP受信スレッド上
+  ├─ Add_Client(e.Client)
+  └─ BeginInvoke(Sub() ...)  ← UIキューに投入して即リターン（修正後）
+         ▼  【UIスレッド】
+         ├─ J_LOGIN色付け()
+         └─ J_Send色付け(現在種目順, 現在ヒート番号)
+               │  全ジャッジ SEND_FLAG=1 かつ 全SEND処理済FLAG=False の場合
+               ├─ 全SEND処理済FLAG = True  （二重実行防止）
+               ├─ U_進行管理.登録("全審判送信済み")
+               ├─ Stopタイマー()
+               ├─ 更新タイマーStart()  →  Timer2（5秒後に次ヒート）
+               ├─ RaiseEvent 全ジャッジ送信済みイベント
+               │      └─ Form1 → F200.F501_更新実行() → F501_採点詳細.更新()
+               └─ Task.Run(関連端末への送信)  ← 別スレッド（非同期）</div>
+
+  <hr />
+
+  
+  <h2>3. 発見した原因と修正内容</h2>
+
+  
+  <h3><span class="badge badge-red">原因①</span> Stopタイマー・更新タイマーStart での二重 Invoke デッドロック</h3>
+  <div class="section-box">
+    <p><span class="tag-cause">原因：</span>
+      非同期スレッドから <code>Stopタイマー()</code> / <code>更新タイマーStart()</code> を呼ぶと、
+      これらのメソッドが内部で <code>Me.Invoke()</code> を呼んでいた。
+      さらにその呼び出し元自身がすでに <code>Me.Invoke()</code> の中にいる場合、
+      UIスレッドが自分自身の完了を待つ「二重 Invoke デッドロック」が発生した。
+    </p>
+    <p><span class="tag-fix">修正：</span>
+      <code>InvokeRequired</code> チェックを追加し、UIスレッド上からの呼び出し時は
+      <code>Invoke</code> を経由せず直接メソッドを呼ぶように変更。
+      また <code>Thread.Sleep</code> を削除してUIスレッドの占有をなくした。
+    </p>
+  </div>
+  <table>
+    <tr><th>ファイル</th><th>修正内容</th><th>コミット</th></tr>
+    <tr>
+      <td><code>F_GM.vb</code></td>
+      <td><code>Stopタイマー()</code> / <code>更新タイマーStart()</code> / <code>更新タイマーStop()</code> に <code>InvokeRequired</code> 分岐追加、<code>Thread.Sleep</code> 削除</td>
+      <td><span class="commit">d40fd2c, 3ef7065</span></td>
+    </tr>
+  </table>
+
+  
+  <h3><span class="badge badge-red">原因②</span> F501_更新実行() での二重 Invoke デッドロック</h3>
+  <div class="section-box">
+    <p><span class="tag-cause">原因：</span>
+      <code>RaiseEvent 全ジャッジ送信済みイベント</code> → <code>Form1</code> →
+      <code>F200.F501_更新実行()</code> の呼び出し経路は
+      すべてUIスレッド上で同期実行される。しかし <code>F501_更新実行()</code> が
+      無条件に <code>Me.Invoke()</code> を呼んでいたため二重 Invoke デッドロックが発生した。
+    </p>
+    <p><span class="tag-fix">修正：</span>
+      <code>InvokeRequired</code> チェックを追加し、UIスレッド上からの呼び出しでは
+      直接 <code>F501_更新()</code> を呼ぶよう変更。
+    </p>
+  </div>
+  <table>
+    <tr><th>ファイル</th><th>修正内容</th><th>コミット</th></tr>
+    <tr>
+      <td><code>画面\F200_採点進行確認.vb</code></td>
+      <td><code>F501_更新実行()</code> に <code>InvokeRequired</code> 分岐追加</td>
+      <td><span class="commit">b4be7ce</span></td>
+    </tr>
+  </table>
+
+  
+  <h3><span class="badge badge-red">原因③</span> SEND_JK系のTCP送信がUIスレッドをブロック</h3>
+  <div class="section-box">
+    <p><span class="tag-cause">原因：</span>
+      全SEND確定後に関連端末へのTCP送信（<code>SEND_JK_MU_Progress</code> 等）を
+      UIスレッド上で直接実行していた。接続数 × ネットワーク遅延の分だけUIスレッドが
+      占有され、その間に届く電文の <code>Me.Invoke</code> が積み上がった。
+    </p>
+    <p><span class="tag-fix">修正：</span>
+      関連端末への送信処理を <code>Task.Run</code> で別スレッドに移動。
+      <code>関連Client_list</code> のスナップショットをUIスレッド上で取得してから
+      <code>Task.Run</code> に渡す方式とし、競合アクセスも防止。
+    </p>
+  </div>
+  <table>
+    <tr><th>ファイル</th><th>修正内容</th><th>コミット</th></tr>
+    <tr>
+      <td><code>F_GM.vb</code></td>
+      <td>関連端末送信を <code>Task.Run</code> で非同期化、スナップショット方式に変更</td>
+      <td><span class="commit">1833f97, a12cbfe</span></td>
+    </tr>
+    <tr>
+      <td><code>TCPClient.vb</code></td>
+      <td><code>Send()</code> にタイムアウト5秒・1回リトライ・エラーログ追加</td>
+      <td><span class="commit">54b0896</span></td>
+    </tr>
+    <tr>
+      <td><code>LOG_C.vb</code></td>
+      <td><code>LogAdd()</code> に <code>SyncLock</code> を追加しファイル競合を解消</td>
+      <td><span class="commit">1833f97</span></td>
+    </tr>
+  </table>
+
+  
+  <h3><span class="badge badge-red">原因④</span> F501内の Me.Invoke(LogDelegate) による二重 Invoke デッドロック（1回目フリーズ）</h3>
+  <div class="section-box">
+    <p><span class="tag-cause">原因：</span>
+      <code>F501_得点詳細_C.vb</code> の <code>更新()</code> / <code>更新_V2()</code> 内で、
+      ログ出力のために <code>Me.Invoke(LogDelegate, ...)</code> を
+      <code>InvokeRequired</code> チェックなしで無条件に呼んでいた。
+      これらのメソッドはUIスレッド上から呼ばれるため、二重 Invoke でデッドロックが発生した。
+    </p>
+    <p>
+      <span class="tag-note">発生条件：</span>
+      ログレベル4が有効（<code>LOGLEVEL &gt;= 4</code>）かつ F501が開いていて
+      <code>PCS数 &gt; 0</code> のとき。デバッグログが有効な環境でのみ発生するため、
+      気づきにくい問題だった。
+    </p>
+    <p><span class="tag-fix">修正：</span>
+      8箇所すべての <code>Me.Invoke(LogDelegate, ...)</code> に
+      <code>InvokeRequired</code> チェックを追加。UIスレッド上からの呼び出しでは
+      直接 <code>WriteLog()</code> を呼ぶよう変更。
+    </p>
+  </div>
+  <table>
+    <tr><th>ファイル</th><th>対象箇所</th><th>コミット</th></tr>
+    <tr>
+      <td><code>画面\F501_得点詳細_C.vb</code></td>
+      <td><code>更新()</code>、<code>更新_V2()</code>、<code>Timer1_Tick</code>、<code>Timer2_Tick</code>、<code>PB_更新_Click</code>、<code>PB_Cali設定_Click</code>×2、<code>TabVisibleChange</code> の計8箇所</td>
+      <td><span class="commit">c356919</span></td>
+    </tr>
+  </table>
+
+  
+  <h3><span class="badge badge-red">原因⑤</span> Me.Invoke のブロッキングによる TCP 受信スレッド詰まり（2回目フリーズ・根本原因）</h3>
+  <div class="section-box">
+    <p><span class="tag-cause">原因：</span>
+      複数のジャッジが同時に SEND した場合、各ジャッジの SEND 電文は
+      別々の TCP 受信スレッドで受信される。
+      <code>Me.Invoke</code>（同期）はUIスレッドの処理が完了するまで
+      呼び出しスレッドをブロックする。
+    </p>
+    <p>
+      TCP受信スレッドAが <code>Me.Invoke</code> でUIスレッドを占有し、
+      <code>F501.更新()</code>（ファイルI/O含む重い処理）を実行している最中に、
+      TCP受信スレッドBが <code>Me.Invoke</code> を呼ぶと、
+      スレッドBがUIスレッドの空きを待ってブロックし続ける。
+      TCPスタックが詰まり、以降の通信が処理されなくなる。
+    </p>
+    <p>
+      さらに <code>SyncLock lockObj</code> を <code>Me.Invoke</code> の中で使っていたが、
+      UIスレッドは1スレッドのみであるため <code>SyncLock</code> は無意味であり、
+      かつデッドロックの原因となり得る余計な構造だった。
+    </p>
+    <p><span class="tag-fix">修正：</span>
+      <code>Me.Invoke</code> を <code>Me.BeginInvoke</code>（非同期・即リターン）に変更し、
+      <code>SyncLock lockObj</code> を削除。
+      TCP受信スレッドはUIキューに処理を投入した後即座にリターンするため、
+      次の電文の受信がブロックされなくなった。
+      UIスレッドはキューに積まれた処理を順番に実行し、
+      <code>全SEND処理済FLAG</code> により全SEND後処理の二重実行も引き続き防止される。
+    </p>
+  </div>
+
+  <div style="margin:0 0 10px">
+    <strong>変更前の構造（デッドロック発生）</strong>
+  </div>
+  <div class="flow-box">【TCP受信スレッドA (R のSEND)】
+  Me.Invoke(Sub()               ← UIスレッドを占有して完了を待つ（ブロッキング）
+    SyncLock lockObj
+      J_Send色付け()
+        → F501.更新()  ← ファイルI/O + 集計（重い）
+    End SyncLock
+  End Sub)
+  ← スレッドAはここで200ms以上ブロック
+
+【TCP受信スレッドB (H のSEND・ほぼ同時）】
+  Me.Invoke(Sub()
+    ← UIスレッドはスレッドAの処理中 → 永遠に待機 → フリーズ</div>
+
+  <div style="margin:0 0 10px">
+    <strong>変更後の構造（正常動作）</strong>
+  </div>
+  <div class="flow-box">【TCP受信スレッドA (R のSEND)】
+  Me.BeginInvoke(Sub() ...)     ← UIキューに投入して即リターン
+  ← すぐ次の電文を受信可能
+
+【TCP受信スレッドB (H のSEND)】
+  Me.BeginInvoke(Sub() ...)     ← UIキューに投入して即リターン
+  ← すぐ次の電文を受信可能
+
+【UIスレッド】
+  キューから処理Aを取り出して実行 → 全SEND後処理 → F501.更新()
+  キューから処理Bを取り出して実行 → 全SEND処理済FLAG=True → スキップ</div>
+
+  <table>
+    <tr><th>ファイル</th><th>修正内容</th><th>コミット</th></tr>
+    <tr>
+      <td><code>F_GM.vb</code></td>
+      <td>SNDRESLT / SNDRESLT_J / SNDRESLT_V2_J / SNDRESLT_BR2_J の4ケースで <code>Me.Invoke</code> → <code>Me.BeginInvoke</code> に変更、<code>SyncLock lockObj</code> 削除</td>
+      <td><span class="commit">e3d362a</span></td>
+    </tr>
+  </table>
+
+  <hr />
+
+  
+  <h2>4. 修正コミット一覧</h2>
+  <table>
+    <tr><th>コミット</th><th>内容</th></tr>
+    <tr><td><span class="commit">d40fd2c</span></td><td><code>Stopタイマー()</code> / <code>更新タイマーStart()</code> に <code>InvokeRequired</code> 分岐、<code>Thread.Sleep</code> 削除</td></tr>
+    <tr><td><span class="commit">3ef7065</span></td><td><code>更新タイマーStop()</code> に <code>InvokeRequired</code> 分岐、<code>Timer2_Tick</code> の <code>Me.Invoke</code> を直接呼び出しに変更</td></tr>
+    <tr><td><span class="commit">54b0896</span></td><td><code>TCPClient.Send()</code> にタイムアウト5秒・1回リトライ・エラーログ追加</td></tr>
+    <tr><td><span class="commit">c0cd13f</span></td><td>コンパイルエラー修正（<code>Do While ... Loop</code>）</td></tr>
+    <tr><td><span class="commit">b4be7ce</span></td><td><code>F501_更新実行()</code> の二重 Invoke 修正、<code>全SEND処理済FLAG</code> 追加、ログレベル設定対応</td></tr>
+    <tr><td><span class="commit">f77addf</span></td><td><code>LOG=Nothing</code> による NullReferenceException 修正（空インスタンス初期化）</td></tr>
+    <tr><td><span class="commit">327fe2f</span></td><td><code>TCPServer=Nothing</code> による NullReferenceException 修正</td></tr>
+    <tr><td><span class="commit">1833f97</span></td><td>SEND_JK 系を <code>Task.Run</code> で非同期化、<code>LogAdd()</code> に <code>SyncLock</code> 追加</td></tr>
+    <tr><td><span class="commit">578fbfe</span></td><td><code>J_Send色付け()</code> に <code>全SEND後処理実行</code> フラグ追加、次ヒート等から呼ぶ際は <code>False</code> 指定</td></tr>
+    <tr><td><span class="commit">a12cbfe</span></td><td><code>関連Client_list</code> のスナップショットをUIスレッドで取得してから <code>Task.Run</code> に渡す</td></tr>
+    <tr><td><span class="commit">c356919</span></td><td><code>F501_得点詳細_C.vb</code> の <code>Me.Invoke(LogDelegate)</code> 8箇所に <code>InvokeRequired</code> チェック追加</td></tr>
+    <tr><td><span class="commit">e3d362a</span></td><td>SNDRESLT 系4ケースを <code>Me.Invoke</code> → <code>Me.BeginInvoke</code> に変更、<code>SyncLock lockObj</code> 削除</td></tr>
+  </table>
+
+  <hr />
+
+  
+  <h2>5. 教訓・設計上の注意点</h2>
+  <table>
+    <tr><th>パターン</th><th>問題</th><th>正しい対処</th></tr>
+    <tr>
+      <td>UIスレッド上から <code>Me.Invoke()</code> を呼ぶ</td>
+      <td>二重 Invoke でデッドロック</td>
+      <td><code>InvokeRequired</code> を確認してから <code>Invoke</code> する</td>
+    </tr>
+    <tr>
+      <td>TCP受信スレッドから <code>Me.Invoke()</code>（同期）を呼ぶ</td>
+      <td>UIスレッドの重い処理中に後続スレッドが積み上がりフリーズ</td>
+      <td><code>Me.BeginInvoke()</code>（非同期）で即リターンする</td>
+    </tr>
+    <tr>
+      <td>UIスレッド上で <code>SyncLock</code> を使う</td>
+      <td>UIスレッドは1スレッドなので無意味。かつデッドロックの温床になる</td>
+      <td>UIスレッド上では <code>SyncLock</code> 不要。削除する</td>
+    </tr>
+    <tr>
+      <td>UIスレッド上でTCP送信・ファイルI/Oを直接行う</td>
+      <td>ネットワーク遅延・ファイルアクセス時間の分だけUIがブロックされる</td>
+      <td><code>Task.Run</code> で別スレッドに移動する</td>
+    </tr>
+    <tr>
+      <td>複数スレッドからログファイルに同時書き込み</td>
+      <td>ファイル競合でブロック・例外発生</td>
+      <td><code>LogAdd()</code> を <code>SyncLock</code> で排他制御する</td>
+    </tr>
+  </table>
+
+  <footer>Made with IBM Bob</footer>
+</div>
+</body>
+</html>
