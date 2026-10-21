@@ -5,6 +5,14 @@
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        ' 未処理例外ハンドラの登録（ABEND時に原因を必ず記録するため）
+        ' ログレベル設定(LogLevel)に関係なく、CrashLog_yyyyMMdd.log に書き出す
+        Try
+            AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf CurrentDomain_UnhandledException
+            AddHandler Application.ThreadException, AddressOf Application_ThreadException
+        Catch
+        End Try
+
         '表示位置の設定
 
         Me.StartPosition = FormStartPosition.Manual
@@ -12,6 +20,29 @@
 
         初期設定()
 
+    End Sub
+
+    ' ソケットスレッド等、UIスレッド以外の未処理例外。
+    ' .NET Framework ではここでログを残しても、その後プロセスは終了する。
+    Private Sub CurrentDomain_UnhandledException(sender As Object, e As UnhandledExceptionEventArgs)
+        Dim ex As Exception = TryCast(e.ExceptionObject, Exception)
+        書込_クラッシュログ("UnhandledException (IsTerminating=" & e.IsTerminating & ")", ex)
+    End Sub
+
+    ' UIスレッドの未処理例外。ログを残して継続する。
+    Private Sub Application_ThreadException(sender As Object, e As System.Threading.ThreadExceptionEventArgs)
+        書込_クラッシュログ("ThreadException", e.Exception)
+    End Sub
+
+    Private Sub 書込_クラッシュログ(種別 As String, ex As Exception)
+        Try
+            Dim path As String = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "CrashLog_" & DateTime.Now.ToString("yyyyMMdd") & ".log")
+            Dim msg As String = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " " & 種別 & vbCrLf &
+                                If(ex IsNot Nothing, ex.ToString(), "(例外オブジェクトなし)") & vbCrLf & vbCrLf
+            System.IO.File.AppendAllText(path, msg, System.Text.Encoding.UTF8)
+        Catch
+            ' ログ書込み失敗でさらに例外を出さない
+        End Try
     End Sub
 
     Private Sub 初期設定()

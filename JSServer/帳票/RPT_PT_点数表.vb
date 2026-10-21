@@ -198,38 +198,45 @@
         Next i
 
 
-        行数 = 2
-        For i = 1 To UBound(採点結果.背番号)
-            Parm.ヒートText(行数) = Parm.ヒートText(行数) & 採点結果.背番号(i).PadLeft(6)
+        '採点結果が集計されているか確認
+        If 採点結果.背番号 IsNot Nothing Then
 
-            '半角ブランクまででカット
-            Dim 苗字 As String = Strings.Split(採点結果.マスタデータ.選手マスタ.Get選手C_by背番号(選手マスタ番号, 採点結果.背番号(i)).リーダー表記名, " ")(0)
-            '全角ブランクまででカット
-            苗字 = Strings.Split(苗字, "　")(0)
-            '左から3文字(6バイト）に限定
-            苗字 = LeftB(苗字, 6)
 
-            Parm.ヒートText(行数) = Parm.ヒートText(行数) & " " & PadRight(苗字, 7)
-            Parm.ヒートText(行数) = Parm.ヒートText(行数) & "    " & Strings.Format(採点結果.総合得点(i), "##0.000").PadLeft(7)
-            Parm.ヒートText(行数) = Parm.ヒートText(行数) & "     " & CStr(採点結果.総合順位表記(i)).PadLeft(3)
-            If 次ラウンド無し = False Then
-                Parm.ヒートText(行数) = Parm.ヒートText(行数) & "       " & UP検索_V2(採点結果.背番号(i), 採点結果)
-            Else
-                Parm.ヒートText(行数) = Parm.ヒートText(行数) & "       " & "  "
-            End If
-            For d = 1 To 採点結果.種目数
-                Parm.ヒートText(行数) = Parm.ヒートText(行数) & "     " & Strings.Format(採点結果.種目(d).選手結果(i).種目得点, "#0.00").PadLeft(5)
-            Next d
+            行数 = 2
+            For i = 1 To UBound(採点結果.背番号)
+                Parm.ヒートText(行数) = Parm.ヒートText(行数) & 採点結果.背番号(i).PadLeft(6)
 
-            行数 = 行数 + 1
-            If 行数 > 20 Then
-                '印刷して、行数をゼロクリア
-                印刷実行(RPT, Parm, 配布先)
+                '半角ブランクまででカット
+                Dim 苗字 As String = Strings.Split(採点結果.マスタデータ.選手マスタ.Get選手C_by背番号(選手マスタ番号, 採点結果.背番号(i)).リーダー表記名, " ")(0)
+                '全角ブランクまででカット
+                苗字 = Strings.Split(苗字, "　")(0)
+                '左から3文字(6バイト）に限定
+                苗字 = LeftB(苗字, 6)
 
-                行数 = 2
-            End If
+                Parm.ヒートText(行数) = Parm.ヒートText(行数) & " " & PadRight(苗字, 7)
+                Parm.ヒートText(行数) = Parm.ヒートText(行数) & "    " & Strings.Format(採点結果.総合得点(i), "##0.000").PadLeft(7)
+                Parm.ヒートText(行数) = Parm.ヒートText(行数) & "     " & CStr(採点結果.総合順位表記(i)).PadLeft(3)
+                If 次ラウンド無し = False Then
+                    Parm.ヒートText(行数) = Parm.ヒートText(行数) & "       " & UP検索_V2(採点結果.背番号(i), 採点結果)
+                Else
+                    Parm.ヒートText(行数) = Parm.ヒートText(行数) & "       " & "  "
+                End If
+                For d = 1 To 採点結果.種目数
+                    Parm.ヒートText(行数) = Parm.ヒートText(行数) & "     " & Strings.Format(採点結果.種目(d).選手結果(i).種目得点, "#0.00").PadLeft(5)
+                Next d
 
-        Next i
+                行数 = 行数 + 1
+                If 行数 > 20 Then
+                    '印刷して、行数をゼロクリア
+                    印刷実行(RPT, Parm, 配布先)
+
+                    行数 = 2
+                End If
+
+            Next i
+
+
+        End If
 
         Parm.ヒート数 = ""
 

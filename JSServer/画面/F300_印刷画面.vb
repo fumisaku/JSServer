@@ -541,18 +541,23 @@ Public Class F300_印刷画面
 
             Dim 採点結果_V2 = New 採点結果_V2(区分番号, 現ラウンド番号)
 
-            Dim PDJ得点詳細 As PDJ得点詳細
-            PDJ得点詳細 = New PDJ得点詳細
-            PDJ得点詳細.CreateHTML(採点結果_V2, "LOCAL")
-            PDJ得点詳細.CreateHTML(採点結果_V2, "REMOTE")
+            If 採点結果_V2.背番号 IsNot Nothing Then
+
+                Dim PDJ得点詳細 As PDJ得点詳細
+                PDJ得点詳細 = New PDJ得点詳細
+                PDJ得点詳細.CreateHTML(採点結果_V2, "LOCAL")
+                PDJ得点詳細.CreateHTML(採点結果_V2, "REMOTE")
+
+                PDJ得点詳細 = Nothing
+            End If
 
             採点結果_V2 = Nothing
-            PDJ得点詳細 = Nothing
 
 
         ElseIf Strings.Left(採点方式, 3) = "VAL" Then
 
             Dim 採点結果_V2 = New 採点結果_V2(区分番号, 現ラウンド番号)
+
 
             Dim VAL得点詳細 As VAL得点詳細
             VAL得点詳細 = New VAL得点詳細
@@ -587,6 +592,13 @@ Public Class F300_印刷画面
         'ブラウザーで開く
         'Dim url As String = マスタデータ.Z_システム設定.HTML_filepath & "\" & "index.html"
         Dim url As String = マスタデータ.Z_システム設定.Comp_filepath & "\LocalResult\Result_" & 区分番号 & "_" & 現ラウンド番号 & ".html"
+
+        '得点詳細HTMLが作成されていない場合は、メッセージを表示して終了する
+        If Not IO.File.Exists(url) Then
+            'MsgBox("得点詳細HTMLが作成されていません。" & vbCrLf & "採点方式(" & 採点方式 & ")、または採点結果の有無を確認してください。" & vbCrLf & url)
+            Exit Sub
+        End If
+
         System.Diagnostics.Process.Start(url)
 
         Try
@@ -1021,6 +1033,7 @@ Public Class F300_印刷画面
         Dim JA_分析 As JA分析_C
         JA_分析 = New JA分析_C
 
+        Dim 結果無FLAG As Boolean = True
 
         Dim 採点方式 As String = マスタデータ.C_ラウンドマスタ.Get採点方式(区分番号, 現ラウンド番号)
 
@@ -1028,19 +1041,29 @@ Public Class F300_印刷画面
             Dim 採点結果_V2 As 採点結果_V2
             採点結果_V2 = New 採点結果_V2(区分番号, 現ラウンド番号)
 
-            JA_分析.JA_CSVファイル作成_V2(採点結果_V2)
+            If 採点結果_V2.背番号 IsNot Nothing Then
+                結果無FLAG = False
+                JA_分析.JA_CSVファイル作成_V2(採点結果_V2)
+
+            End If
+
             採点結果_V2 = Nothing
         Else
             Dim 採点結果 As 採点結果_C
             採点結果 = New 採点結果_C(区分番号, 現ラウンド番号)
 
-            JA_分析.JA_CSVファイル作成(採点結果)
+            If 採点結果.背番号 IsNot Nothing Then
+                結果無FLAG = False
+                JA_分析.JA_CSVファイル作成(採点結果)
+            End If
+
             採点結果 = Nothing
 
         End If
 
-
-        JA_分析.分析EXCELの作成(区分番号, 現ラウンド番号)
+        If 結果無FLAG = False Then
+            JA_分析.分析EXCELの作成(区分番号, 現ラウンド番号)
+        End If
 
         JA_分析 = Nothing
 

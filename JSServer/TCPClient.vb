@@ -84,7 +84,28 @@ Public Class TCPClient
     End Sub
 
     'BeginReceiveのコールバック
+    ' 受信用スレッドで例外が漏れるとプロセスごと終了(ABEND)するため、ここで必ず捕捉する。
+    ' 例外が出た場合は、この接続だけを閉じてサーバーは継続させる。
     Private Sub ReceiveDataCallback(ByVal ar As IAsyncResult)
+        Try
+            ReceiveDataCore(ar)
+        Catch ex As Exception
+            SafeLog("TCPClient.ReceiveDataCallbackでエラー 端末名:" & 端末名 & " 区分番号:" & 区分番号 & " ラウンド番号:" & ラウンド番号 & " ジャッジ記号:" & ジャッジ記号 & "//" & ex.ToString)
+            Me.Close()
+        End Try
+    End Sub
+
+    ' LOG未設定でも例外を出さずにログ出力する
+    Private Sub SafeLog(msg As String)
+        Try
+            If LOG IsNot Nothing Then
+                LOG.LogAdd(msg, 1)
+            End If
+        Catch
+        End Try
+    End Sub
+
+    Private Sub ReceiveDataCore(ByVal ar As IAsyncResult)
         '読み込んだ長さを取得
         Dim len As Integer = -1
         Try
@@ -308,6 +329,8 @@ Public Class TCPClient
     ''' </summary>
     Public Sub Close()
 
+        Dim 閉じた As Boolean = False
+
         Try
             SyncLock Me
                 If (Me.IsClosed) Then
@@ -315,28 +338,39 @@ Public Class TCPClient
                 End If
 
                 '閉じる
-                Me._socket.Shutdown(SocketShutdown.Both)
-                Me._socket.Close()
+                ' 相手が異常切断している場合 Shutdown は例外を投げるが、
+                ' それで Close と Nothing 代入が飛ばないよう個別に保護する
+                Dim s As Socket = Me._socket
+                Try
+                    s.Shutdown(SocketShutdown.Both)
+                Catch
+                End Try
+                Try
+                    s.Close()
+                Catch
+                End Try
                 Me._socket = Nothing
                 If Not (Me.receivedBytes Is Nothing) Then
                     Me.receivedBytes.Close()
                     Me.receivedBytes = Nothing
                 End If
+                閉じた = True
             End SyncLock
-            'イベントを発生
-            Me.OnDisconnected(New EventArgs)
 
         Catch ex As Exception
 
-            Try
-                LOG.LogAdd("TCPClient.Close()でエラー 端末名:" & 端末名 & " 区分番号:" & 区分番号 & " ラウンド番号:" & ラウンド番号 & " ジャッジ記号:" & ジャッジ記号 & " 種目記号:" & 種目記号 & " ヒート番号:" & ヒート番号 & "//" & ex.ToString, 1)
-
-            Catch ex2 As Exception
-
-            End Try
-
+            SafeLog("TCPClient.Close()でエラー 端末名:" & 端末名 & " 区分番号:" & 区分番号 & " ラウンド番号:" & ラウンド番号 & " ジャッジ記号:" & ジャッジ記号 & " 種目記号:" & 種目記号 & " ヒート番号:" & ヒート番号 & "//" & ex.ToString)
 
         End Try
+
+        'イベントを発生（ロックの外で。ハンドラの例外が受信スレッドに漏れないよう保護）
+        If 閉じた Then
+            Try
+                Me.OnDisconnected(New EventArgs)
+            Catch ex As Exception
+                SafeLog("TCPClient.Disconnectedイベントでエラー 端末名:" & 端末名 & "//" & ex.ToString)
+            End Try
+        End If
 
     End Sub
 

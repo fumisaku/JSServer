@@ -284,6 +284,9 @@
 
         Dim NewFilename As String = パス名 & "\" & File名
 
+        '出力先フォルダが無ければ作成する
+        IO.Directory.CreateDirectory(パス名)
+
         '_00_初期化()
 
         'ファイル書き出し

@@ -46,35 +46,66 @@ Public Class TCPServer2
             'クライアントSocketの取得
             socket = server.EndAccept(ar)
         Catch
-            LOG.LogAdd("TCPServer2.AcceptCallback 接続要求受入失敗", 1)
+            SafeLog("TCPServer2.AcceptCallback 接続要求受入失敗")
             'System.Console.WriteLine("閉じました。")
             Return
         End Try
 
 
 
-        'クライアントが接続した時の処理をここに書く
-        Dim TCPClient2 = New TCPClient2
-        Dim client As TCPClient2 = CreateClient(socket)
+        ' 接続受付スレッドで例外が漏れるとプロセスごと終了(ABEND)するため、必ず捕捉する。
+        ' 例外時は該当接続だけ閉じ、次の接続待ちは必ず再開する。
+        Dim client As TCPClient2 = Nothing
+        Try
+            'クライアントが接続した時の処理をここに書く
+            Dim TCPClient2 = New TCPClient2
+            client = CreateClient(socket)
+            client.Set_LOG(LOG)
 
-        'コレクションに追加
-        Me._acceptedClients.Add(client)
+            'コレクションに追加
+            Me._acceptedClients.Add(client)
 
 
-        'イベントハンドラの追加
-        AddHandler client.Disconnected2, AddressOf client_Disconnected
-        AddHandler client.ReceivedData2, AddressOf client_ReceivedData
+            'イベントハンドラの追加
+            AddHandler client.Disconnected2, AddressOf client_Disconnected
+            AddHandler client.ReceivedData2, AddressOf client_ReceivedData
 
-        'イベントを発生
-        Me.OnAcceptedClient2(New ServerEventArgs2(client))
-        'データ受信開始
-        If Not client.IsClosed Then
-            client.StartReceive()
-        End If
+            'イベントを発生
+            Me.OnAcceptedClient2(New ServerEventArgs2(client))
+            'データ受信開始
+            If Not client.IsClosed Then
+                client.StartReceive()
+            End If
+
+        Catch ex As Exception
+            SafeLog("TCPServer2.AcceptCallback 接続処理でエラー//" & ex.ToString)
+            Try
+                If client IsNot Nothing Then
+                    client.Close()
+                Else
+                    socket.Close()
+                End If
+            Catch
+            End Try
+        End Try
 
 
         '接続要求待機を再開する
-        server.BeginAccept(New System.AsyncCallback(AddressOf AcceptCallback), server)
+        Try
+            server.BeginAccept(New System.AsyncCallback(AddressOf AcceptCallback), server)
+        Catch ex As Exception
+            SafeLog("TCPServer2.AcceptCallback 接続待機の再開に失敗//" & ex.ToString)
+        End Try
+    End Sub
+
+    ' LOG未設定でも例外を出さずにログ出力する
+    Private Sub SafeLog(msg As String)
+        Try
+            If LOG IsNot Nothing Then
+                LOG.LogAdd(msg, 1)
+            End If
+        Catch
+        End Try
     End Sub
 
     'クライアントからデータを受信した時
